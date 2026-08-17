@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roll & Row Game Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!-- chess.js for flawless move validation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<link rel="stylesheet" href="hub.css">
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="brand">
+      <div class="dice-mark">⚄</div>
+      <div class="title">Roll &amp; Row<small>Games &amp; Everyday Tools</small></div>
+    </div>
+    <nav class="tabs" id="mainTabs">
+      <button data-view="hub" class="active">Hub</button>
+      <button data-view="sl">S&amp;L</button>
+      <button data-view="ttt">Tic-Tac-Toe</button>
+      <button data-view="snake">Snake</button>
+      <button data-view="slicer">Fruit Slicer</button>
+      <button data-view="chess">Chess</button>
+      <button data-view="uno">UNO</button>
+      <button data-view="dots">Dots &amp; Boxes</button>
+      <button data-view="memory">Memory</button>
+      <span class="tab-divider"></span>
+      <button data-view="calc">Calculator</button>
+    </nav>
+  </header>
+
+  <!-- HUB -->
+  <section class="view active" id="view-hub">
+    <h3 class="section-label">🎲 Games</h3>
+    <div class="hub-grid">
+      <div class="game-card" data-goto="sl">
+        <div class="eyebrow">Board · 1-6 Players · 3D Mode</div>
+        <h2>Snakes &amp; Ladders</h2>
+        <p>Race from square 1 to 100. Climb ladders, dodge snakes, and let the 3D dice decide who gets there first.</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">🐍</div>
+      </div>
+      <div class="game-card" data-goto="ttt">
+        <div class="eyebrow">Grid · 2 Players or CPU · Strategy</div>
+        <h2>Tic-Tac-Toe</h2>
+        <p>Three in a row wins it. Play a friend on one screen, or test your nerve against the CPU.</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">✕⭘</div>
+      </div>
+      <div class="game-card" data-goto="snake">
+        <div class="eyebrow">Arcade · 1 Player · Reflex</div>
+        <h2>Snake</h2>
+        <p>Guide the snake around the board, gobble up food, and grow as long as you can without hitting yourself.</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">🍎</div>
+      </div>
+      <div class="game-card" data-goto="slicer">
+        <div class="eyebrow">Arcade · 1 Player · Action</div>
+        <h2>Fruit Slicer</h2>
+        <p>Swipe to slice the flying fruits into pieces before the timer runs out!</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">🍉</div>
+      </div>
+      <div class="game-card" data-goto="chess">
+        <div class="eyebrow">Board · Strategy · Minimax AI</div>
+        <h2>Chess</h2>
+        <p>The timeless game of strategy powered by chess.js. Play a friend locally or challenge the built-in bot.</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">♟</div>
+      </div>
+      <div class="game-card" data-goto="uno">
+        <div class="eyebrow">Cards · Multi-Bot AI</div>
+        <h2>Ultimate UNO</h2>
+        <p>Play against up to 3 AI bots with varying difficulty levels. Can you empty your hand first?</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">🎴</div>
+      </div>
+      <div class="game-card" data-goto="dots">
+        <div class="eyebrow">Grid · Strategy · AI</div>
+        <h2>Dots &amp; Boxes</h2>
+        <p>Connect the dots to claim boxes. Play against a friend locally or challenge the computer!</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">🔲</div>
+      </div>
+      <div class="game-card" data-goto="memory">
+        <div class="eyebrow">Grid · 2 Players · Memory</div>
+        <h2>Card Matching</h2>
+        <p>Test your memory! Flip cards to find matching pairs in this multiplayer challenge.</p>
+        <button class="play-btn">Play now →</button>
+        <div class="card-glyph">🃏</div>
+      </div>
+    </div>
+
+    <h3 class="section-label">🧰 Apps</h3>
+    <div class="hub-grid">
+      <div class="game-card app" data-goto="calc">
+        <div class="eyebrow">Utility · Arithmetic</div>
+        <h2>Calculator</h2>
+        <p>A clean, full-keypad calculator with percent, sign toggle, backspace, and keyboard support.</p>
+        <button class="play-btn">Open →</button>
+        <div class="card-glyph">🧮</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SNAKES & LADDERS 3D -->
+  <section class="view" id="view-sl" data-sl-theme="classic">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Snakes &amp; Ladders 3D</h2>
+      </div>
+      
+      <div class="sl3d-container">
+        <!-- Game Board (Always Visible) -->
+        <div id="sl3d-board-wrapper">
+            <div id="sl3d-grid"></div>
+            <canvas id="sl3d-overlay" width="500" height="500"></canvas>
+            <div id="sl3d-tokens-layer"></div>
+        </div>
+
+        <!-- Dynamic Side Panel -->
+        <div class="sl3d-panel">
+            
+            <!-- SETUP MENU -->
+            <div id="sl3d-setup-menu">
+                <h3 style="margin-top:0;">Game Setup</h3>
+                <div class="sl3d-form-group">
+                    <label>Player Mode</label>
+                    <select id="sl3d-mode-select">
+                        <option value="1v1">1 vs 1 (Local)</option>
+                        <option value="3p">3 Players</option>
+                        <option value="4p">4 Players</option>
+                        <option value="5p">5 Players</option>
+                        <option value="6p">6 Players</option>
+                        <option value="1vBot">1 Player vs Bot</option>
+                        <option value="botvbot">Bot vs Bot</option>
+                    </select>
+                </div>
+                <div class="sl3d-form-group">
+                    <label>Difficulty (Live Preview)</label>
+                    <select id="sl3d-diff-select" onchange="sl3d_previewDifficulty()">
+                        <option value="easy">Easy (Base Board)</option>
+                        <option value="normal">Normal (+3 Snakes)</option>
+                        <option value="hard">Hard (+6 Snakes)</option>
+                        <option value="extreme">Extreme (+10 Snakes)</option>
+                    </select>
+                </div>
+                <button class="sl3d-btn" onclick="sl3d_startGame()" style="margin-top: 20px;">Start Game</button>
+            </div>
+
+            <!-- PLAY CONTROLS (Hidden initially) -->
+            <div id="sl3d-play-controls" style="display: none; flex-direction: column; height: 100%;">
+                
+                <div class="sl3d-form-group" style="margin-bottom: 20px;">
+                    <label>Active Theme</label>
+                    <select id="sl3d-theme-select" onchange="sl3d_changeTheme()">
+                        <option value="classic">Classic</option>
+                        <option value="dark">Dark Mode</option>
+                        <option value="forest">Forest</option>
+                    </select>
+                </div>
+
+                <div id="sl3d-status-panel">
+                    <strong>Turn:</strong> <span id="sl3d-current-player-name">Player 1</span>
+                </div>
+                
+                <div id="sl3d-dice-container">
+                    <div class="sl3d-scene">
+                        <div class="sl3d-cube" id="sl3d-dice">
+                            <div class="sl3d-cube__face sl3d-cube__face--1"><span class="sl3d-dot"></span></div>
+                            <div class="sl3d-cube__face sl3d-cube__face--2"><span class="sl3d-dot"></span><span class="sl3d-dot"></span></div>
+                            <div class="sl3d-cube__face sl3d-cube__face--3"><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span></div>
+                            <div class="sl3d-cube__face sl3d-cube__face--4"><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span></div>
+                            <div class="sl3d-cube__face sl3d-cube__face--5"><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span></div>
+                            <div class="sl3d-cube__face sl3d-cube__face--6"><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span><span class="sl3d-dot"></span></div>
+                        </div>
+                    </div>
+                    <button class="sl3d-btn" id="sl3d-roll-btn" onclick="sl3d_playerRoll()">Roll Dice</button>
+                </div>
+
+                <div id="sl3d-action-text"></div>
+                
+                <div style="flex: 1;"></div>
+                
+                <button onclick="sl3d_resetToMenu()" class="sl3d-btn sl3d-danger-btn">End Game</button>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIC TAC TOE -->
+  <section class="view" id="view-ttt">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Tic-Tac-Toe</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="mode-select" id="tttMode">
+            <button data-mode="pvp" class="active">2 Player</button>
+            <button data-mode="cpu">Vs CPU</button>
+          </div>
+          <button class="reset-btn" id="tttReset">New round</button>
+        </div>
+      </div>
+      <div class="ttt-layout">
+        <div class="scoreboard">
+          <div class="score-chip x"><div class="lbl">X wins</div><div class="val" id="scoreX">0</div></div>
+          <div class="score-chip d"><div class="lbl">Draws</div><div class="val" id="scoreD">0</div></div>
+          <div class="score-chip o"><div class="lbl">O wins</div><div class="val" id="scoreO">0</div></div>
+        </div>
+        <div id="tttBoard"></div>
+        <div class="ttt-status" id="tttStatus">X's turn</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SNAKE -->
+  <section class="view" id="view-snake">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Snake</h2>
+        <button class="reset-btn" id="snakeReset">Restart game</button>
+      </div>
+      <div class="snake-layout">
+        <div class="board-wrap snake-board-wrap">
+          <canvas id="snakeCanvas" width="400" height="400"></canvas>
+          <div class="snake-overlay" id="snakeOverlay">
+            <div class="snake-overlay-msg" id="snakeOverlayMsg">Press an arrow key or tap Start to play</div>
+            <button class="roll-btn snake-start-btn" id="snakeStart">Start</button>
+          </div>
+        </div>
+        <div class="side-panel">
+          <div class="player-card turn">
+            <div class="name"><span class="dot" style="background:var(--green)"></span>Score</div>
+            <div class="pos" id="snakeScore">0</div>
+          </div>
+          <div class="player-card">
+            <div class="name"><span class="dot" style="background:var(--gold)"></span>Best</div>
+            <div class="pos" id="snakeBest">0</div>
+          </div>
+          <div class="dice-zone snake-controls">
+            <div class="snake-dpad" id="snakeDpad">
+              <button data-dir="up" class="dpad-btn dpad-up">↑</button>
+              <button data-dir="left" class="dpad-btn dpad-left">←</button>
+              <button data-dir="down" class="dpad-btn dpad-down">↓</button>
+              <button data-dir="right" class="dpad-btn dpad-right">→</button>
+            </div>
+            <div class="sl-msg" id="snakeMsg">Arrow keys / WASD, or use the pad</div>
+          </div>
+          <div class="dice-zone">
+            <div class="food-legend">
+              <span><i style="background:#C1443C"></i>Food — +1 point</span>
+              <span><i style="background:#E8B44D"></i>Golden food — +2 points</span>
+            </div>
+          </div>
+          <div class="dice-zone snake-settings">
+            <div class="settings-row">
+              <label>Speed</label>
+              <div class="mode-select" id="snakeSpeedMode">
+                <button data-speed="slow">Slow</button>
+                <button data-speed="normal" class="active">Normal</button>
+                <button data-speed="fast">Fast</button>
+              </div>
+            </div>
+            <div class="settings-row">
+              <label>Theme</label>
+              <select id="snakeThemeSelect">
+                <option value="0">Classic</option>
+                <option value="1">Sunset</option>
+                <option value="2">Ocean</option>
+                <option value="3">Neon</option>
+                <option value="4">Monochrome</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <label>Background</label>
+              <select id="snakeBgSelect">
+                <option value="0">Parchment</option>
+                <option value="1">Midnight</option>
+                <option value="2">Forest</option>
+                <option value="3">Sand</option>
+                <option value="4">Slate</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRUIT SLICER -->
+  <section class="view" id="view-slicer">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Fruit Slicer</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="score-chip x"><div class="lbl">Time</div><div class="val" id="fsTimeUI" style="color:var(--cream);">00:00</div></div>
+          <div class="score-chip x"><div class="lbl">Score</div><div class="val" id="fsScoreUI">0</div></div>
+          <button class="reset-btn" id="slicerResetBtn">Menu</button>
+        </div>
+      </div>
+      <div class="slicer-wrap">
+        <canvas id="slicerCanvas"></canvas>
+        
+        <!-- Start Screen -->
+        <div class="snake-overlay" id="slicerStartScreen">
+          <div class="snake-overlay-msg" style="margin-bottom:15px; font-size:28px;">Emoji Slicer</div>
+          <div class="snake-overlay-msg" style="font-size:16px;">Select Game Duration:</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:16px;">
+            <button class="roll-btn snake-start-btn" onclick="fsStartGame(30)">30s</button>
+            <button class="roll-btn snake-start-btn" onclick="fsStartGame(60)">60s</button>
+            <button class="roll-btn snake-start-btn" onclick="fsStartGame(120)">120s</button>
+          </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="snake-overlay hidden" id="slicerGameOverScreen">
+          <div class="snake-overlay-msg" style="margin-bottom:15px; font-size:32px; text-shadow:0px 0px 10px #ff9500;">Time's Up!</div>
+          <div class="snake-overlay-msg" style="font-size:22px;">Final Score: <span id="fsFinalScore" style="color:var(--gold);">0</span></div>
+          <button class="roll-btn snake-start-btn" style="margin-top:24px;" onclick="fsShowStartMenu()">Play Again</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CHESS -->
+  <section class="view" id="view-chess" data-theme="classic">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Chess</h2>
+        <button class="reset-btn" id="chessResetBtn">New game</button>
+      </div>
+      <div class="chess-layout">
+        <div class="board-wrap">
+          <div id="chessBoard"></div>
+        </div>
+        <div class="side-panel">
+          <div class="player-card turn" id="chessStatusCard">
+            <div class="name" id="chessStatusText">White to move</div>
+          </div>
+          
+          <div class="dice-zone snake-settings">
+            <div class="settings-row">
+              <label>Mode</label>
+              <select id="chessModeSelect">
+                <option value="bot">Player vs CPU</option>
+                <option value="1v1">2 Player</option>
+              </select>
+            </div>
+            <div class="settings-row" id="chessDiffRow">
+              <label>CPU Difficulty</label>
+              <select id="chessDiffSelect">
+                <option value="1">Easy (Depth 1)</option>
+                <option value="2" selected>Normal (Depth 2)</option>
+                <option value="3">Hard (Depth 3)</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <label>Board Theme</label>
+              <select id="chessThemeSelect">
+                <option value="classic">Classic</option>
+                <option value="dark">Dark</option>
+                <option value="old">Vintage</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ULTIMATE UNO -->
+  <section class="view" id="view-uno">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Ultimate UNO</h2>
+        <button class="reset-btn" onclick="unoShowSetup()">Menu</button>
+      </div>
+      <div class="uno-wrap">
+        
+        <!-- Setup Screen -->
+        <div id="uno-setup-screen">
+          <h1>Ultimate UNO</h1>
+          <div class="uno-setup-row">
+            <label>Opponents:</label>
+            <select id="uno-bot-count">
+              <option value="1">1 vs 1</option>
+              <option value="2">1 vs 2 Bots</option>
+              <option value="3" selected>1 vs 3 Bots</option>
+            </select>
+          </div>
+          <div class="uno-setup-row">
+            <label>Difficulty:</label>
+            <select id="uno-diff-level">
+              <option value="easy">Easy (Random)</option>
+              <option value="normal" selected>Normal (Standard AI)</option>
+              <option value="hard">Hard (Aggressive AI)</option>
+              <option value="ultra">Ultra Hard (Targeting AI)</option>
+            </select>
+          </div>
+          <button class="uno-start-btn" onclick="unoStartGame()">Start Game</button>
+        </div>
+
+        <!-- Game Board -->
+        <div id="uno-game-board">
+          <div id="uno-bots-wrapper"></div>
+
+          <div id="uno-center-stage">
+            <div id="uno-status">Dealing...</div>
+            <div id="uno-direction-indicator">↻ Play Direction ↻</div>
+            <div class="uno-piles">
+              <div id="uno-draw-pile" class="uno-card uno-card-back" onclick="unoPlayerDrawAction()">UNO</div>
+              <div id="uno-discard-pile"></div>
+            </div>
+            <button id="uno-pass-btn" onclick="unoEndTurn()">End Turn</button>
+          </div>
+
+          <div id="uno-player-area">
+            <h3 style="margin:5px 0; text-shadow: 1px 1px 3px black; font-size:16px;">Your Hand</h3>
+            <div id="uno-player-hand" class="uno-hand-container"></div>
+          </div>
+        </div>
+
+        <!-- Color Picker -->
+        <div id="uno-color-picker">
+          <h3 style="margin-top:0; font-size:18px;">Choose Color:</h3>
+          <button class="uno-color-btn" style="background:#ff5555;" onclick="unoPlayerSetColor('red')"></button>
+          <button class="uno-color-btn" style="background:#5555ff;" onclick="unoPlayerSetColor('blue')"></button><br>
+          <button class="uno-color-btn" style="background:#55aa55;" onclick="unoPlayerSetColor('green')"></button>
+          <button class="uno-color-btn" style="background:#ffaa00;" onclick="unoPlayerSetColor('yellow')"></button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DOTS AND BOXES -->
+  <section class="view" id="view-dots">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Dots &amp; Boxes</h2>
+      </div>
+      <div class="dots-app-wrapper" id="dotsWrapper" data-theme="classic">
+        
+        <div class="dots-theme-selector">
+          <label for="dotsThemeSelect" style="font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase;">Theme:</label>
+          <select id="dotsThemeSelect" onchange="dotsChangeTheme(this.value)">
+            <option value="classic">Classic 3D</option>
+            <option value="neon">Cyber Neon</option>
+            <option value="wood">Rustic Wood</option>
+          </select>
+        </div>
+
+        <div class="dots-scoreboard">
+          <div id="dots-p1-panel" class="dots-player-score active-p1">
+            <span id="dots-p1-name">Player 1</span>: <span id="dots-score1">0</span>
+          </div>
+          <div id="dots-p2-panel" class="dots-player-score">
+            <span id="dots-p2-name">Player 2</span>: <span id="dots-score2">0</span>
+          </div>
+        </div>
+
+        <div class="dots-board-container">
+          <div id="dots-board"></div>
+        </div>
+
+        <div class="dots-controls">
+          <button class="dots-btn" onclick="dotsInitGame(false)">Play 2 Players</button>
+          <button class="dots-btn" onclick="dotsInitGame(true)">Play vs AI Bot</button>
+        </div>
+
+        <div class="dots-winner-modal" id="dotsWinnerModal">
+          <div class="dots-modal-content" id="dotsModalContent">
+            <h2 id="dotsWinnerText">Player 1 Wins!</h2>
+            <div class="dots-controls" style="margin-top:0;">
+              <button class="dots-btn" onclick="dotsInitGame(false)">Play 2 Players</button>
+              <button class="dots-btn" onclick="dotsInitGame(true)">Play vs AI Bot</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CARD MATCHING (MEMORY) -->
+  <section class="view" id="view-memory">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Multiplayer Memory Match</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select id="memory-grid-size" style="padding: 6px 10px; border-radius: 6px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.15); font-weight: bold; cursor: pointer;">
+            <option value="4">4 x 4 (16 cards)</option>
+            <option value="6">6 x 6 (36 cards)</option>
+            <option value="8">8 x 8 (64 cards)</option>
+            <option value="10">10 x 10 (100 cards)</option>
+          </select>
+          <button class="reset-btn" id="memory-start-btn" onclick="memoryStartGame()">Start New Game</button>
+        </div>
+      </div>
+      <div class="memory-layout">
+        <!-- Scoreboard -->
+        <div class="memory-scoreboard">
+          <div id="memory-p1-panel" class="memory-player-card memory-active-p1">
+            <h3 style="color:var(--p1-color);">Player 1</h3>
+            <div class="memory-score" id="memory-p1-score">0</div>
+          </div>
+          <div id="memory-p2-panel" class="memory-player-card">
+            <h3 style="color:var(--p2-color);">Player 2</h3>
+            <div class="memory-score" id="memory-p2-score">0</div>
+          </div>
+        </div>
+
+        <div id="memory-status-message">Select a grid size and click Start!</div>
+
+        <!-- Board Container -->
+        <div class="memory-game-board" id="memory-game-board"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section class="view" id="view-calc">
+    <button class="back-link" data-goto="hub">← Back to hub</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Calculator</h2>
+        <button class="reset-btn" id="calcResetBtn">Clear all</button>
+      </div>
+      <div class="calc-wrap">
+        <div class="calc-display">
+          <div class="prev" id="calcPrev">&nbsp;</div>
+          <div class="curr" id="calcCurr">0</div>
+        </div>
+        <div class="calc-grid" id="calcGrid">
+          <button class="calc-btn func" data-act="clear">C</button>
+          <button class="calc-btn func" data-act="back">⌫</button>
+          <button class="calc-btn func" data-act="percent">%</button>
+          <button class="calc-btn op" data-op="÷">÷</button>
+
+          <button class="calc-btn" data-digit="7">7</button>
+          <button class="calc-btn" data-digit="8">8</button>
+          <button class="calc-btn" data-digit="9">9</button>
+          <button class="calc-btn op" data-op="×">×</button>
+
+          <button class="calc-btn" data-digit="4">4</button>
+          <button class="calc-btn" data-digit="5">5</button>
+          <button class="calc-btn" data-digit="6">6</button>
+          <button class="calc-btn op" data-op="−">−</button>
+
+          <button class="calc-btn" data-digit="1">1</button>
+          <button class="calc-btn" data-digit="2">2</button>
+          <button class="calc-btn" data-digit="3">3</button>
+          <button class="calc-btn op" data-op="+">+</button>
+
+          <button class="calc-btn func" data-act="sign">±</button>
+          <button class="calc-btn zero" data-digit="0">0</button>
+          <button class="calc-btn" data-digit=".">.</button>
+          <button class="calc-btn equals" data-act="equals">=</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script>
+/* ---------------- Navigation ---------------- */
+let goto = function(view){
+  const views = document.querySelectorAll('.view');
+  const tabBtns = document.querySelectorAll('#mainTabs button');
+  views.forEach(v=>v.classList.toggle('active', v.id === 'view-'+view));
+  tabBtns.forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+};
+
+tabBtns = document.querySelectorAll('#mainTabs button');
+tabBtns.forEach(b=>b.addEventListener('click', ()=>goto(b.dataset.view)));
+document.querySelectorAll('[data-goto]').forEach(el=>{
+  el.addEventListener('click', ()=>goto(el.dataset.goto));
+});
+
+
+/* ================= SNAKES & LADDERS 3D ================= */
+const sl3d_BASE_LADDERS = { 2: 38, 7: 14, 8: 31, 15: 26, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 78: 98, 87: 94 };
+const sl3d_BASE_SNAKES = { 16: 6, 46: 25, 49: 11, 62: 19, 64: 60, 74: 53, 89: 68, 92: 88, 95: 75, 99: 80 };
+const sl3d_EXTRA_SNAKES = {
+    normal: { 33: 8, 55: 22, 97: 76 },
+    hard: { 33: 8, 55: 22, 97: 76, 43: 18, 68: 35, 83: 59 },
+    extreme: { 33: 8, 55: 22, 97: 76, 43: 18, 68: 35, 83: 59, 24: 3, 39: 17, 79: 45, 94: 61 }
+};
+const sl3d_COLORS = ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6', '#e67e22'];
+
+let sl3d_ladders = { ...sl3d_BASE_LADDERS };
+let sl3d_snakes = { ...sl3d_BASE_SNAKES };
+let sl3d_players = [];
+let sl3d_currentPlayerIndex = 0;
+let sl3d_isRolling = false;
+let sl3d_gameOver = false;
+let sl3d_currentDiceRot = { x: -15, y: 15 };
+
+function sl3d_changeTheme() {
+    const theme = document.getElementById('sl3d-theme-select').value;
+    document.getElementById('view-sl').setAttribute('data-sl-theme', theme);
+    sl3d_drawCanvas(); 
+}
+
+function sl3d_previewDifficulty() {
+    const diff = document.getElementById('sl3d-diff-select').value;
+    sl3d_snakes = { ...sl3d_BASE_SNAKES };
+    if (diff !== 'easy') {
+        Object.assign(sl3d_snakes, sl3d_EXTRA_SNAKES[diff]);
+    }
+    sl3d_drawCanvas();
+}
+
+function sl3d_setActionText(msg, color) {
+    const actionEl = document.getElementById('sl3d-action-text');
+    actionEl.innerHTML = `<span style="color:${color}">${msg}</span>`;
+}
+
+function sl3d_resetToMenu() {
+    document.getElementById('sl3d-setup-menu').style.display = 'block';
+    document.getElementById('sl3d-play-controls').style.display = 'none';
+    sl3d_players = [];
+    sl3d_updateTokens();
+    sl3d_setActionText('', '#333');
+    sl3d_gameOver = true;
+}
+
+function sl3d_startGame() {
+    const mode = document.getElementById('sl3d-mode-select').value;
+    sl3d_previewDifficulty();
+
+    sl3d_players = [];
+    let numPlayers = 2;
+    let isBotSetup = [];
+    
+    switch(mode) {
+        case '1v1': numPlayers = 2; isBotSetup = [false, false]; break;
+        case '3p': numPlayers = 3; isBotSetup = [false, false, false]; break;
+        case '4p': numPlayers = 4; isBotSetup = [false, false, false, false]; break;
+        case '5p': numPlayers = 5; isBotSetup = [false, false, false, false, false]; break;
+        case '6p': numPlayers = 6; isBotSetup = [false, false, false, false, false, false]; break;
+        case '1vBot': numPlayers = 2; isBotSetup = [false, true]; break;
+        case 'botvbot': numPlayers = 2; isBotSetup = [true, true]; break;
+    }
+
+    for (let i = 0; i < numPlayers; i++) {
+        sl3d_players.push({
+            id: i,
+            name: isBotSetup[i] ? `Bot ${i+1}` : `Player ${i+1}`,
+            color: sl3d_COLORS[i],
+            pos: 1,
+            isBot: isBotSetup[i]
+        });
+    }
+
+    sl3d_currentPlayerIndex = 0;
+    sl3d_gameOver = false;
+    
+    sl3d_updateTokens();
+    
+    document.getElementById('sl3d-setup-menu').style.display = 'none';
+    document.getElementById('sl3d-play-controls').style.display = 'flex';
+    sl3d_setActionText('Game Started!', 'inherit');
+    
+    const cube = document.getElementById('sl3d-dice');
+    sl3d_currentDiceRot = { x: -15, y: 15 };
+    cube.style.transform = `translateZ(-40px) rotateX(${sl3d_currentDiceRot.x}deg) rotateY(${sl3d_currentDiceRot.y}deg)`;
+
+    sl3d_updateTurnUI();
+}
+
+function sl3d_buildGrid() {
+    const grid = document.getElementById('sl3d-grid');
+    grid.innerHTML = '';
+    for (let row = 9; row >= 0; row--) {
+        for (let col = 0; col <= 9; col++) {
+            const cell = document.createElement('div');
+            cell.className = 'sl3d-cell';
+            const num = row * 10 + (row % 2 === 0 ? col + 1 : 10 - col);
+            cell.innerText = num;
+            cell.id = `sl3d-cell-${num}`;
+            if ((row + col) % 2 === 0) cell.classList.add('light-cell');
+            else cell.classList.add('dark-cell');
+            grid.appendChild(cell);
+        }
+    }
+}
+
+function sl3d_getCoordinates(num) {
+    if(num < 1) num = 1;
+    if(num > 100) num = 100;
+    const zeroIndex = num - 1;
+    const row = Math.floor(zeroIndex / 10);
+    let col = zeroIndex % 10;
+    if (row % 2 !== 0) col = 9 - col;
+    const uiRow = 9 - row; 
+    return {
+        x: col * 50 + 25,
+        y: uiRow * 50 + 25
+    };
+}
+
+function sl3d_drawCanvas() {
+    const canvas = document.getElementById('sl3d-overlay');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const viewSl = document.getElementById('view-sl');
+    const computed = getComputedStyle(viewSl);
+    const ladderColor = computed.getPropertyValue('--sl-ladder-color').trim() || '#27ae60';
+    const snakeColor = computed.getPropertyValue('--sl-snake-color').trim() || '#e74c3c';
+
+    ctx.lineCap = 'round';
+    for (let [start, end] of Object.entries(sl3d_ladders)) {
+        const p1 = sl3d_getCoordinates(parseInt(start));
+        const p2 = sl3d_getCoordinates(end);
+        
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath(); ctx.moveTo(p1.x - 8, p1.y + 4); ctx.lineTo(p2.x - 8, p2.y + 4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(p1.x + 12, p1.y + 4); ctx.lineTo(p2.x + 12, p2.y + 4); ctx.stroke();
+        
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = ladderColor;
+        ctx.beginPath(); ctx.moveTo(p1.x - 10, p1.y); ctx.lineTo(p2.x - 10, p2.y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(p1.x + 10, p1.y); ctx.lineTo(p2.x + 10, p2.y); ctx.stroke();
+        
+        const steps = 6;
+        for(let i=1; i<=steps; i++) {
+            const rx = p1.x + (p2.x - p1.x) * (i / (steps+1));
+            const ry = p1.y + (p2.y - p1.y) * (i / (steps+1));
+            ctx.beginPath();
+            ctx.moveTo(rx - 10, ry);
+            ctx.lineTo(rx + 10, ry);
+            ctx.stroke();
+        }
+    }
+
+    for (let [start, end] of Object.entries(sl3d_snakes)) {
+        const p1 = sl3d_getCoordinates(parseInt(start));
+        const p2 = sl3d_getCoordinates(end);
+        
+        const midX = (p1.x + p2.x) / 2 + (Math.random() * 50 - 25);
+        const midY = (p1.y + p2.y) / 2 + (Math.random() * 50 - 25);
+        
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath();
+        ctx.moveTo(p1.x+4, p1.y+4);
+        ctx.quadraticCurveTo(midX+4, midY+4, p2.x+4, p2.y+4);
+        ctx.stroke();
+
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = snakeColor;
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, 9, 0, Math.PI * 2);
+        ctx.fillStyle = snakeColor;
+        ctx.fill();
+        
+        ctx.fillStyle = "white";
+        ctx.beginPath(); ctx.arc(p1.x-3, p1.y-2, 2, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p1.x+3, p1.y-2, 2, 0, Math.PI*2); ctx.fill();
+    }
+}
+
+function sl3d_updateTokens() {
+    const layer = document.getElementById('sl3d-tokens-layer');
+    layer.innerHTML = '';
+    const posMap = {};
+    sl3d_players.forEach(p => {
+        if(!posMap[p.pos]) posMap[p.pos] = [];
+        posMap[p.pos].push(p);
+    });
+
+    sl3d_players.forEach(p => {
+        const token = document.createElement('div');
+        token.className = 'sl3d-player-token';
+        token.style.backgroundColor = p.color;
+        const coords = sl3d_getCoordinates(p.pos);
+        
+        const sameCellPlayers = posMap[p.pos];
+        let offsetX = 0, offsetY = 0;
+        if (sameCellPlayers.length > 1) {
+            const idx = sameCellPlayers.indexOf(p);
+            const angle = (idx / sameCellPlayers.length) * Math.PI * 2;
+            offsetX = Math.cos(angle) * 12;
+            offsetY = Math.sin(angle) * 12;
+        }
+
+        token.style.left = `${coords.x + offsetX}px`;
+        token.style.top = `${coords.y + offsetY}px`;
+        layer.appendChild(token);
+    });
+}
+
+function sl3d_updateTurnUI() {
+    if(sl3d_gameOver) return;
+    const cp = sl3d_players[sl3d_currentPlayerIndex];
+    const span = document.getElementById('sl3d-current-player-name');
+    span.innerText = cp.name;
+    span.style.color = cp.color;
+    
+    const btn = document.getElementById('sl3d-roll-btn');
+    if (cp.isBot) {
+        btn.disabled = true;
+        setTimeout(sl3d_playerRoll, 1000);
+    } else {
+        btn.disabled = false;
+    }
+}
+
+async function sl3d_playerRoll() {
+    if (sl3d_isRolling || sl3d_gameOver) return;
+    sl3d_isRolling = true;
+    document.getElementById('sl3d-roll-btn').disabled = true;
+    sl3d_setActionText('Rolling...', 'inherit');
+
+    const diceEl = document.getElementById('sl3d-dice');
+    const roll = Math.floor(Math.random() * 6) + 1;
+    let targetX = 0, targetY = 0;
+    
+    switch(roll) {
+        case 1: targetX = 0; targetY = 0; break;
+        case 2: targetX = 0; targetY = -180; break;
+        case 3: targetX = 0; targetY = -90; break;
+        case 4: targetX = 0; targetY = 90; break;
+        case 5: targetX = -90; targetY = 0; break;
+        case 6: targetX = 90; targetY = 0; break;
+    }
+
+    const baseSpinsX = Math.floor(sl3d_currentDiceRot.x / 360) * 360 + 1080;
+    const baseSpinsY = Math.floor(sl3d_currentDiceRot.y / 360) * 360 + 1080;
+    
+    sl3d_currentDiceRot.x = baseSpinsX + targetX;
+    sl3d_currentDiceRot.y = baseSpinsY + targetY;
+    diceEl.style.transform = `translateZ(-40px) rotateX(${sl3d_currentDiceRot.x}deg) rotateY(${sl3d_currentDiceRot.y}deg)`;
+
+    await new Promise(r => setTimeout(r, 1200)); 
+
+    const cp = sl3d_players[sl3d_currentPlayerIndex];
+    sl3d_setActionText(`${cp.name} rolled a ${roll}`, cp.color);
+    await sl3d_movePlayer(cp, roll);
+}
+
+async function sl3d_movePlayer(player, roll) {
+    if (player.pos + roll <= 100) {
+        player.pos += roll;
+        sl3d_updateTokens();
+        await new Promise(r => setTimeout(r, 500)); 
+
+        if (sl3d_ladders[player.pos]) {
+            sl3d_setActionText(`${player.name} climbed a ladder!`, 'var(--sl-ladder-color)');
+            player.pos = sl3d_ladders[player.pos];
+            sl3d_updateTokens();
+            await new Promise(r => setTimeout(r, 500));
+        } else if (sl3d_snakes[player.pos]) {
+            sl3d_setActionText(`Oh no! ${player.name} got bitten!`, 'var(--sl-snake-color)');
+            player.pos = sl3d_snakes[player.pos];
+            sl3d_updateTokens();
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        if (player.pos === 100) {
+            sl3d_setActionText(`🎉 ${player.name} WINS! 🎉`, player.color);
+            sl3d_gameOver = true;
+            document.getElementById('sl3d-current-player-name').innerText = `${player.name} WINS!`;
+            document.getElementById('sl3d-roll-btn').disabled = true;
+            return;
+        }
+    } else {
+        sl3d_setActionText(`${player.name} needs exactly ${100 - player.pos} to win.`, player.color);
+        await new Promise(r => setTimeout(r, 600)); 
+    }
+
+    if (roll === 6) {
+        sl3d_setActionText(`${player.name} gets another turn!`, player.color);
+    } else {
+        sl3d_currentPlayerIndex = (sl3d_currentPlayerIndex + 1) % sl3d_players.length;
+    }
+
+    sl3d_isRolling = false;
+    sl3d_updateTurnUI();
+}
+
+sl3d_buildGrid();
+sl3d_previewDifficulty();
+
+
+/* ================= TIC TAC TOE ================= */
+const tttBoardEl = document.getElementById('tttBoard');
+const tttStatus = document.getElementById('tttStatus');
+let tttCells = Array(9).fill(null);
+let tttTurn = 'X';
+let tttOver = false;
+let tttMode = 'pvp';
+let scores = {X:0, O:0, D:0};
+const wins = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+function buildTttBoard(){
+  tttBoardEl.innerHTML='';
+  for(let i=0;i<9;i++){
+    const c = document.createElement('div');
+    c.className = 'ttt-cell';
+    c.dataset.i = i;
+    c.addEventListener('click', onTttClick);
+    tttBoardEl.appendChild(c);
+  }
+}
+buildTttBoard();
+function onTttClick(e){
+  const i = +e.currentTarget.dataset.i;
+  if(tttOver || tttCells[i]) return;
+  if(tttMode==='cpu' && tttTurn==='O') return;
+  placeMark(i, tttTurn);
+}
+function placeMark(i, mark){
+  tttCells[i] = mark;
+  const cellEl = tttBoardEl.children[i];
+  cellEl.textContent = mark;
+  cellEl.classList.add(mark.toLowerCase());
+  const result = checkWin();
+  if(result){
+    tttOver = true;
+    if(result.win){
+      result.line.forEach(idx=>tttBoardEl.children[idx].classList.add('win'));
+      scores[result.mark]++;
+      tttStatus.textContent = `${result.mark} wins the round!`;
+    } else {
+      scores.D++;
+      tttStatus.textContent = "It's a draw.";
+    }
+    updateScores();
+    return;
+  }
+  tttTurn = tttTurn==='X' ? 'O' : 'X';
+  tttStatus.textContent = `${tttTurn}'s turn`;
+  if(tttMode==='cpu' && tttTurn==='O' && !tttOver){
+    setTimeout(cpuMove, 450);
+  }
+}
+function checkWin(){
+  for(const line of wins){
+    const [a,b,c] = line;
+    if(tttCells[a] && tttCells[a]===tttCells[b] && tttCells[a]===tttCells[c]){
+      return {win:true, mark:tttCells[a], line};
+    }
+  }
+  if(tttCells.every(v=>v)) return {win:false};
+  return null;
+}
+function cpuMove(){
+  if(tttOver) return;
+  const empty = tttCells.map((v,i)=>v?null:i).filter(v=>v!==null);
+  const tryFind = (mark)=>{
+    for(const line of wins){
+      const vals = line.map(i=>tttCells[i]);
+      const marks = vals.filter(v=>v===mark).length;
+      const blanks = line.filter(i=>!tttCells[i]);
+      if(marks===2 && blanks.length===1) return blanks[0];
+    }
+    return null;
+  };
+  let choice = tryFind('O');
+  if(choice===null) choice = tryFind('X');
+  if(choice===null && !tttCells[4]) choice = 4;
+  if(choice===null){
+    const corners = [0,2,6,8].filter(i=>!tttCells[i]);
+    if(corners.length) choice = corners[Math.floor(Math.random()*corners.length)];
+  }
+  if(choice===null) choice = empty[Math.floor(Math.random()*empty.length)];
+  placeMark(choice, 'O');
+}
+function updateScores(){
+  document.getElementById('scoreX').textContent = scores.X;
+  document.getElementById('scoreO').textContent = scores.O;
+  document.getElementById('scoreD').textContent = scores.D;
+}
+document.getElementById('tttReset').addEventListener('click', ()=>{
+  tttCells = Array(9).fill(null);
+  tttTurn = 'X';
+  tttOver = false;
+  buildTttBoard();
+  tttStatus.textContent = "X's turn";
+});
+document.getElementById('tttMode').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  document.querySelectorAll('#tttMode button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  tttMode = btn.dataset.mode;
+  tttCells = Array(9).fill(null);
+  tttTurn = 'X';
+  tttOver = false;
+  buildTttBoard();
+  tttStatus.textContent = "X's turn";
+});
+
+/* ================= SNAKE ================= */
+const snakeCanvas = document.getElementById('snakeCanvas');
+const sctx = snakeCanvas.getContext('2d');
+const SNAKE_SPEEDS = { slow:170, normal:115, fast:65 };
+const SNAKE_THEMES = [
+  { name:'Classic',  head:'#2a3163', body:'#4C9A6A' },
+  { name:'Sunset',   head:'#7a1f18', body:'#E8B44D' },
+  { name:'Ocean',    head:'#0b3d5c', body:'#2fb6c4' },
+  { name:'Neon',     head:'#ff2fd1', body:'#39ff88' },
+  { name:'Monochrome', head:'#101010', body:'#8a8a8a' }
+];
+const SNAKE_BACKGROUNDS = [
+  { name:'Parchment', light:'#F2E8CF', dark:'#e8dbb8' },
+  { name:'Midnight',  light:'#232a4d', dark:'#1b2140' },
+  { name:'Forest',    light:'#e7f0df', dark:'#cfe0bd' },
+  { name:'Sand',      light:'#f5e6c8', dark:'#e0cfa0' },
+  { name:'Slate',     light:'#e4e6ea', dark:'#cfd3da' }
+];
+const FOOD_TYPES = {
+  normal: { color:'#C1443C', points:1, chance:0.8 },
+  bonus:  { color:'#E8B44D', points:2, chance:0.2 }
+};
+const GRID = 20;
+let CELL = snakeCanvas.width / GRID;
+let snakeSpeedKey = 'normal';
+let snakeThemeIdx = 0;
+let snakeBgIdx = 0;
+const snakeOverlay = document.getElementById('snakeOverlay');
+const snakeOverlayMsg = document.getElementById('snakeOverlayMsg');
+const snakeStartBtn = document.getElementById('snakeStart');
+const snakeScoreEl = document.getElementById('snakeScore');
+const snakeBestEl = document.getElementById('snakeBest');
+const snakeMsg = document.getElementById('snakeMsg');
+let snakeBody, snakeDir, snakeNextDir, snakeFood, snakeScore, snakeBest = 0;
+let snakeTimer = null, snakeRunning = false, snakeSpeed = SNAKE_SPEEDS.normal;
+
+function snakeResetState(){
+  const mid = Math.floor(GRID/2);
+  snakeBody = [{x:mid+2,y:mid},{x:mid+1,y:mid},{x:mid,y:mid}];
+  snakeDir = {x:1,y:0};
+  snakeNextDir = {x:1,y:0};
+  snakeScore = 0;
+  snakeSpeed = SNAKE_SPEEDS[snakeSpeedKey];
+  placeFood();
+  snakeScoreEl.textContent = '0';
+  drawSnake();
+}
+function placeFood(){
+  let valid = false;
+  let pos;
+  while(!valid){
+    pos = { x: Math.floor(Math.random()*GRID), y: Math.floor(Math.random()*GRID) };
+    valid = !snakeBody.some(s=>s.x===pos.x && s.y===pos.y);
+  }
+  const type = Math.random() < FOOD_TYPES.bonus.chance ? 'bonus' : 'normal';
+  snakeFood = { x: pos.x, y: pos.y, type };
+}
+function drawSnake(){
+  sctx.clearRect(0,0,snakeCanvas.width, snakeCanvas.height);
+  const bg = SNAKE_BACKGROUNDS[snakeBgIdx];
+  const theme = SNAKE_THEMES[snakeThemeIdx];
+  for(let y=0;y<GRID;y++){
+    for(let x=0;x<GRID;x++){
+      sctx.fillStyle = (x+y)%2===0 ? bg.light : bg.dark;
+      sctx.fillRect(x*CELL, y*CELL, CELL, CELL);
+    }
+  }
+  const foodInfo = FOOD_TYPES[snakeFood.type];
+  sctx.fillStyle = foodInfo.color;
+  const fx = snakeFood.x*CELL + CELL/2, fy = snakeFood.y*CELL + CELL/2;
+  sctx.beginPath();
+  sctx.arc(fx, fy, CELL*(snakeFood.type==='bonus' ? 0.4 : 0.32), 0, Math.PI*2);
+  sctx.fill();
+  if(snakeFood.type==='bonus'){
+    sctx.strokeStyle = 'rgba(0,0,0,.3)';
+    sctx.lineWidth = 2;
+    sctx.stroke();
+  }
+  snakeBody.forEach((seg, i)=>{
+    sctx.fillStyle = i===0 ? theme.head : theme.body;
+    const pad = 1.5;
+    const r = i===0 ? 5 : 4;
+    roundRect(sctx, seg.x*CELL+pad, seg.y*CELL+pad, CELL-pad*2, CELL-pad*2, r);
+    sctx.fill();
+  });
+}
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function snakeTick(){
+  snakeDir = snakeNextDir;
+  const head = {
+    x: (snakeBody[0].x + snakeDir.x + GRID) % GRID,
+    y: (snakeBody[0].y + snakeDir.y + GRID) % GRID
+  };
+  if(snakeBody.some(s=>s.x===head.x && s.y===head.y)){
+    snakeGameOver();
+    return;
+  }
+  snakeBody.unshift(head);
+  if(head.x===snakeFood.x && head.y===snakeFood.y){
+    snakeScore += FOOD_TYPES[snakeFood.type].points;
+    snakeScoreEl.textContent = snakeScore;
+    placeFood();
+  } else {
+    snakeBody.pop();
+  }
+  drawSnake();
+}
+function restartLoop(){
+  if(snakeTimer) clearInterval(snakeTimer);
+  snakeTimer = setInterval(snakeTick, snakeSpeed);
+}
+function snakeGameOver(){
+  snakeRunning = false;
+  clearInterval(snakeTimer);
+  snakeTimer = null;
+  if(snakeScore > snakeBest){
+    snakeBest = snakeScore;
+    snakeBestEl.textContent = snakeBest;
+  }
+  snakeOverlayMsg.textContent = `Game over — score ${snakeScore}. Tap Start to try again.`;
+  snakeStartBtn.textContent = 'Play again';
+  snakeOverlay.classList.remove('hidden');
+  snakeMsg.textContent = 'Arrow keys / WASD, or use the pad';
+}
+function snakeStart(){
+  snakeResetState();
+  snakeRunning = true;
+  snakeOverlay.classList.add('hidden');
+  snakeStartBtn.textContent = 'Start';
+  restartLoop();
+}
+function snakePause(){
+  if(snakeTimer){ clearInterval(snakeTimer); snakeTimer = null; }
+  snakeRunning = false;
+}
+function setSnakeDir(dx,dy){
+  if(!snakeRunning) return;
+  if(snakeBody.length>1 && dx===-snakeDir.x && dy===-snakeDir.y) return;
+  if(dx===-snakeNextDir.x && dy===-snakeNextDir.y && (dx!==0||dy!==0) && snakeBody.length>1) return;
+  snakeNextDir = {x:dx,y:dy};
+}
+document.getElementById('snakeSpeedMode').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  document.querySelectorAll('#snakeSpeedMode button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  snakeSpeedKey = btn.dataset.speed;
+  snakeSpeed = SNAKE_SPEEDS[snakeSpeedKey];
+  if(snakeRunning) restartLoop();
+});
+document.getElementById('snakeThemeSelect').addEventListener('change', (e)=>{
+  snakeThemeIdx = +e.target.value;
+  drawSnake();
+});
+document.getElementById('snakeBgSelect').addEventListener('change', (e)=>{
+  snakeBgIdx = +e.target.value;
+  drawSnake();
+});
+document.addEventListener('keydown', (e)=>{
+  const view = document.getElementById('view-snake');
+  if(!view.classList.contains('active')) return;
+  const key = e.key.toLowerCase();
+  if(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d'].includes(key)) e.preventDefault();
+  if(key==='arrowup'||key==='w') setSnakeDir(0,-1);
+  else if(key==='arrowdown'||key==='s') setSnakeDir(0,1);
+  else if(key==='arrowleft'||key==='a') setSnakeDir(-1,0);
+  else if(key==='arrowright'||key==='d') setSnakeDir(1,0);
+});
+document.getElementById('snakeDpad').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.dpad-btn');
+  if(!btn) return;
+  const dir = btn.dataset.dir;
+  if(dir==='up') setSnakeDir(0,-1);
+  else if(dir==='down') setSnakeDir(0,1);
+  else if(dir==='left') setSnakeDir(-1,0);
+  else if(dir==='right') setSnakeDir(1,0);
+});
+snakeStartBtn.addEventListener('click', snakeStart);
+document.getElementById('snakeReset').addEventListener('click', ()=>{
+  snakePause();
+  snakeResetState();
+  snakeOverlay.classList.remove('hidden');
+  snakeOverlayMsg.textContent = 'Press an arrow key or tap Start to play';
+  snakeStartBtn.textContent = 'Start';
+});
+snakeResetState();
+
+
+/* ================= FRUIT SLICER (Time-Based) ================= */
+const fsCanvas = document.getElementById('slicerCanvas');
+const fsCtx = fsCanvas.getContext('2d');
+const fsScoreEl = document.getElementById('fsScoreUI');
+const fsTimeEl = document.getElementById('fsTimeUI');
+const fsStartMenu = document.getElementById('slicerStartScreen');
+const fsGameOverScreen = document.getElementById('slicerGameOverScreen');
+
+fsCanvas.width = 600;
+fsCanvas.height = 600;
+
+let fsScore = 0;
+let fsFruits = [];
+let fsParticles = [];
+let fsSliceTrail = [];
+let fsIsSlicing = false;
+let fsIsPlaying = false; 
+let fsAnimFrame = null;
+let fsTimerInterval = null;
+let fsTimeLeft = 0;
+
+const fsFruitTypes = [
+  { emoji: '🍉', color: '#ff3b30' },
+  { emoji: '🍊', color: '#ff9500' },
+  { emoji: '🍋', color: '#ffcc00' },
+  { emoji: '🥝', color: '#4cd964' },
+  { emoji: '🍎', color: '#ff3b30' },
+  { emoji: '🍏', color: '#4cd964' },
+  { emoji: '🍇', color: '#af52de' },
+  { emoji: '🍓', color: '#ff3b30' },
+  { emoji: '🍈', color: '#baffc9' },
+  { emoji: '🍍', color: '#ffcc00' },
+  { emoji: '🥭', color: '#ff9500' },
+  { emoji: '🍑', color: '#ff9d76' },
+  { emoji: '🍒', color: '#cc0000' }
+];
+
+class FsFruit {
+  constructor() {
+    this.radius = Math.random() * 15 + 35;
+    this.x = Math.random() * (fsCanvas.width - this.radius * 2) + this.radius;
+    this.y = fsCanvas.height + 50; 
+    
+    this.vx = (Math.random() - 0.5) * 10; 
+    this.vy = -(Math.random() * 6 + 18); 
+    
+    this.angle = 0;
+    this.spin = (Math.random() - 0.5) * 0.2; 
+    
+    const type = fsFruitTypes[Math.floor(Math.random() * fsFruitTypes.length)];
+    this.emoji = type.emoji;
+    this.color = type.color;
+    this.active = true;
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.25; 
+    this.angle += this.spin; 
+
+    if (this.y > fsCanvas.height + 100) {
+      this.active = false;
+    }
+  }
+
+  draw() {
+    fsCtx.save();
+    fsCtx.translate(this.x, this.y);
+    fsCtx.rotate(this.angle);
+    
+    fsCtx.font = `${this.radius * 2}px Arial`;
+    fsCtx.textAlign = "center";
+    fsCtx.textBaseline = "middle";
+    fsCtx.fillText(this.emoji, 0, 0);
+    
+    fsCtx.restore();
+  }
+}
+
+class FsParticle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 12;
+    this.vy = (Math.random() - 0.5) * 12;
+    this.life = 1.0;
+    this.color = color;
+    this.size = Math.random() * 4 + 2;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.2;
+    this.life -= 0.04;
+  }
+  draw() {
+    fsCtx.globalAlpha = Math.max(0, this.life);
+    fsCtx.beginPath();
+    fsCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    fsCtx.fillStyle = this.color;
+    fsCtx.fill();
+    fsCtx.globalAlpha = 1.0;
+  }
+}
+
+function fsStartGame(seconds) {
+  fsStartMenu.classList.add('hidden');
+  fsGameOverScreen.classList.add('hidden');
+  
+  fsScore = 0;
+  fsScoreEl.innerText = fsScore;
+  fsFruits = [];
+  fsParticles = [];
+  fsSliceTrail = [];
+  
+  fsTimeLeft = seconds;
+  fsUpdateTimeDisplay();
+  
+  fsIsPlaying = true;
+  if(fsAnimFrame) cancelAnimationFrame(fsAnimFrame);
+  fsGameLoop();
+  
+  if(fsTimerInterval) clearInterval(fsTimerInterval);
+  fsTimerInterval = setInterval(() => {
+    fsTimeLeft--;
+    fsUpdateTimeDisplay();
+    if(fsTimeLeft <= 0) {
+      fsEndGame();
+    }
+  }, 1000);
+}
+
+function fsUpdateTimeDisplay() {
+  let m = Math.floor(fsTimeLeft / 60);
+  let s = fsTimeLeft % 60;
+  fsTimeEl.innerText = `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function fsEndGame() {
+  fsIsPlaying = false;
+  if(fsTimerInterval) clearInterval(fsTimerInterval);
+  fsGameOverScreen.classList.remove('hidden');
+  document.getElementById('fsFinalScore').innerText = fsScore;
+}
+
+function fsShowStartMenu() {
+  fsIsPlaying = false;
+  if(fsTimerInterval) clearInterval(fsTimerInterval);
+  fsStartMenu.classList.remove('hidden');
+  fsGameOverScreen.classList.add('hidden');
+  fsCtx.clearRect(0,0,fsCanvas.width, fsCanvas.height);
+  fsTimeEl.innerText = "00:00";
+  fsScoreEl.innerText = "0";
+}
+
+function fsUpdateMousePos(e) {
+  if (!fsIsPlaying || !fsIsSlicing) return;
+  e.preventDefault(); 
+  
+  const rect = fsCanvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  
+  const scaleX = fsCanvas.width / rect.width;
+  const scaleY = fsCanvas.height / rect.height;
+  
+  const x = (clientX - rect.left) * scaleX;
+  const y = (clientY - rect.top) * scaleY;
+  
+  fsSliceTrail.push({x, y});
+  if (fsSliceTrail.length > 8) {
+    fsSliceTrail.shift();
+  }
+}
+
+function fsHandleStart(e) {
+  if (!fsIsPlaying) return;
+  fsIsSlicing = true;
+  fsSliceTrail = [];
+  fsUpdateMousePos(e);
+}
+
+function fsHandleMove(e) {
+  if (!fsIsSlicing || !fsIsPlaying) return;
+  fsUpdateMousePos(e);
+  fsCheckSlice();
+}
+
+function fsHandleEnd() {
+  fsIsSlicing = false;
+}
+
+fsCanvas.addEventListener('mousedown', fsHandleStart);
+fsCanvas.addEventListener('mousemove', fsHandleMove);
+window.addEventListener('mouseup', fsHandleEnd);
+fsCanvas.addEventListener('touchstart', fsHandleStart, {passive: false});
+fsCanvas.addEventListener('touchmove', fsHandleMove, {passive: false});
+window.addEventListener('touchend', fsHandleEnd);
+
+function fsCheckSlice() {
+  if (fsSliceTrail.length < 2) return;
+  const lastPoint = fsSliceTrail[fsSliceTrail.length - 1];
+  
+  for (let i = 0; i < fsFruits.length; i++) {
+    let f = fsFruits[i];
+    if (!f.active) continue;
+    
+    const dist = Math.hypot(f.x - lastPoint.x, f.y - lastPoint.y);
+    
+    if (dist < f.radius) {
+      f.active = false;
+      fsScore++;
+      fsScoreEl.innerText = fsScore;
+      
+      for (let p = 0; p < 20; p++) {
+        fsParticles.push(new FsParticle(f.x, f.y, f.color));
+      }
+    }
+  }
+}
+
+function fsDrawTrail() {
+  if (fsSliceTrail.length < 2) return;
+  
+  fsCtx.beginPath();
+  fsCtx.moveTo(fsSliceTrail[0].x, fsSliceTrail[0].y);
+  for (let i = 1; i < fsSliceTrail.length; i++) {
+    fsCtx.lineTo(fsSliceTrail[i].x, fsSliceTrail[i].y);
+  }
+  
+  fsCtx.strokeStyle = '#fff';
+  fsCtx.lineWidth = 6;
+  fsCtx.lineCap = 'round';
+  fsCtx.lineJoin = 'round';
+  fsCtx.shadowBlur = 15;
+  fsCtx.shadowColor = '#ffffaa';
+  fsCtx.stroke();
+  fsCtx.shadowBlur = 0; 
+}
+
+function fsShrinkTrail() {
+  if (fsSliceTrail.length > 0) {
+    fsSliceTrail.shift();
+  }
+}
+
+function fsGameLoop() {
+  if (!fsIsPlaying) return;
+  fsCtx.clearRect(0, 0, fsCanvas.width, fsCanvas.height);
+  
+  if (fsIsPlaying && Math.random() < 0.035) {
+    fsFruits.push(new FsFruit());
+  }
+
+  for (let i = fsFruits.length - 1; i >= 0; i--) {
+    fsFruits[i].update();
+    if (!fsFruits[i].active) {
+      fsFruits.splice(i, 1);
+    } else {
+      fsFruits[i].draw();
+    }
+  }
+
+  for (let i = fsParticles.length - 1; i >= 0; i--) {
+    fsParticles[i].update();
+    if (fsParticles[i].life <= 0) {
+      fsParticles.splice(i, 1);
+    } else {
+      fsParticles[i].draw();
+    }
+  }
+
+  fsDrawTrail();
+  if (!fsIsSlicing) fsShrinkTrail();
+
+  fsAnimFrame = requestAnimationFrame(fsGameLoop);
+}
+
+document.getElementById('slicerResetBtn').addEventListener('click', fsShowStartMenu);
+
+const _fsOrigGoto2 = goto;
+goto = function(view){
+  _fsOrigGoto2(view);
+  if(view !== 'slicer') {
+    if (fsIsPlaying) fsShowStartMenu();
+  }
+};
+
+
+/* ================= CHESS (Powered by chess.js) ================= */
+const chessGame = new Chess();
+const chessBoardWrap = document.getElementById('chessBoard');
+const chessStatusText = document.getElementById('chessStatusText');
+const chessView = document.getElementById('view-chess');
+
+let chessSelectedSquare = null;
+let chessIsAnimating = false;
+
+// Unicode mapping for pieces
+const chessPiecesMap = {
+  'p': '♟', 'n': '♞', 'b': '♝', 'r': '♜', 'q': '♛', 'k': '♚',
+  'P': '♙', 'N': '♘', 'B': '♗', 'R': '♖', 'Q': '♕', 'K': '♔'
+};
+
+// Theme Switcher
+document.getElementById('chessThemeSelect').addEventListener('change', (e) => {
+  chessView.setAttribute('data-theme', e.target.value);
+});
+
+// Mode Switcher (Hide difficulty if 1v1)
+document.getElementById('chessModeSelect').addEventListener('change', (e) => {
+  document.getElementById('chessDiffRow').style.display = e.target.value === '1v1' ? 'none' : 'flex';
+  resetChessGame();
+});
+
+document.getElementById('chessResetBtn').addEventListener('click', resetChessGame);
+
+function createChessBoardUI() {
+  chessBoardWrap.innerHTML = '';
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      const squareEl = document.createElement('div');
+      const isLight = (row + col) % 2 === 0;
+      squareEl.className = `chess-sq ${isLight ? 'light' : 'dark'}`;
+      
+      const file = String.fromCharCode(97 + col);
+      const rank = 8 - row;
+      squareEl.dataset.square = `${file}${rank}`;
+      
+      squareEl.addEventListener('click', () => handleChessSquareClick(`${file}${rank}`));
+      chessBoardWrap.appendChild(squareEl);
+    }
+  }
+  renderChessPieces();
+}
+
+function renderChessPieces() {
+  // Clear existing pieces
+  document.querySelectorAll('.chess-piece').forEach(p => p.remove());
+
+  const board = chessGame.board();
+  board.forEach((row, rowIndex) => {
+    row.forEach((piece, colIndex) => {
+      if (piece) {
+        const file = String.fromCharCode(97 + colIndex);
+        const rank = 8 - rowIndex;
+        const squareId = `${file}${rank}`;
+        
+        const pieceEl = document.createElement('div');
+        pieceEl.className = 'chess-piece';
+        pieceEl.dataset.square = squareId;
+        pieceEl.innerHTML = piece.color === 'w' ? chessPiecesMap[piece.type.toUpperCase()] : chessPiecesMap[piece.type];
+        
+        if (piece.color === 'b') {
+          pieceEl.style.color = '#000';
+        } else {
+          pieceEl.style.color = '#fff';
+        }
+
+        const squareEl = document.querySelector(`[data-square="${squareId}"]`);
+        if (squareEl) {
+          squareEl.appendChild(pieceEl);
+        }
+      }
+    });
+  });
+  updateChessStatus();
+}
+
+function clearChessHighlights() {
+  document.querySelectorAll('.chess-sq').forEach(sq => {
+    sq.classList.remove('selected', 'highlight');
+  });
+}
+
+function handleChessSquareClick(sq) {
+  if (chessIsAnimating || chessGame.game_over()) return;
+
+  const mode = document.getElementById('chessModeSelect').value;
+  if (mode === 'bot' && chessGame.turn() === 'b') return; 
+
+  if (chessSelectedSquare) {
+    const moveDetails = {
+      from: chessSelectedSquare,
+      to: sq,
+      promotion: 'q'
+    };
+
+    const move = chessGame.move(moveDetails);
+
+    if (move) {
+      clearChessHighlights();
+      animateChessMove(chessSelectedSquare, sq, () => {
+        chessSelectedSquare = null;
+        if (mode === 'bot' && !chessGame.game_over()) {
+          setTimeout(makeBotMove, 250);
+        }
+      });
+    } else {
+      const pieceOnNewSq = chessGame.get(sq);
+      if (pieceOnNewSq && pieceOnNewSq.color === chessGame.turn()) {
+        selectChessSquare(sq);
+      } else {
+        chessSelectedSquare = null;
+        clearChessHighlights();
+      }
+    }
+  } else {
+    const piece = chessGame.get(sq);
+    if (piece && piece.color === chessGame.turn()) {
+      selectChessSquare(sq);
+    }
+  }
+}
+
+function selectChessSquare(sq) {
+  clearChessHighlights();
+  chessSelectedSquare = sq;
+  document.querySelector(`[data-square="${sq}"]`).classList.add('selected');
+  
+  const moves = chessGame.moves({ square: sq, verbose: true });
+  moves.forEach(m => {
+    document.querySelector(`[data-square="${m.to}"]`).classList.add('highlight');
+  });
+}
+
+function animateChessMove(fromSq, toSq, callback) {
+  chessIsAnimating = true;
+  
+  const pieceEl = document.querySelector(`.chess-piece[data-square="${fromSq}"]`);
+  const targetSqEl = document.querySelector(`.chess-sq[data-square="${toSq}"]`);
+  const fromSqEl = document.querySelector(`.chess-sq[data-square="${fromSq}"]`);
+
+  if (pieceEl && targetSqEl && fromSqEl) {
+    const fromRect = fromSqEl.getBoundingClientRect();
+    const toRect = targetSqEl.getBoundingClientRect();
+    const dx = toRect.left - fromRect.left;
+    const dy = toRect.top - fromRect.top;
+
+    pieceEl.style.transform = `translate(${dx}px, ${dy}px)`;
+
+    setTimeout(() => {
+      renderChessPieces();
+      chessIsAnimating = false;
+      if (callback) callback();
+    }, 250); 
+  } else {
+    renderChessPieces();
+    chessIsAnimating = false;
+    if (callback) callback();
+  }
+}
+
+function updateChessStatus() {
+  let status = '';
+  let moveColor = chessGame.turn() === 'w' ? 'White' : 'Black';
+
+  if (chessGame.in_checkmate()) {
+    status = `CHECKMATE! ${moveColor} loses.`;
+  } else if (chessGame.in_draw()) {
+    status = 'Game drawn';
+  } else {
+    status = `${moveColor} to move`;
+    if (chessGame.in_check()) {
+      status += ' (In Check!)';
+    }
+  }
+  chessStatusText.innerText = status;
+}
+
+function resetChessGame() {
+  chessGame.reset();
+  chessSelectedSquare = null;
+  clearChessHighlights();
+  createChessBoardUI();
+}
+
+const chessPieceValues = { p: 10, n: 30, b: 30, r: 50, q: 90, k: 900 };
+
+function evaluateChessBoard() {
+  let totalEvaluation = 0;
+  const board = chessGame.board();
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      const piece = board[i][j];
+      if (piece) {
+        const val = chessPieceValues[piece.type];
+        totalEvaluation += piece.color === 'w' ? val : -val;
+      }
+    }
+  }
+  return totalEvaluation;
+}
+
+function minimax(depth, alpha, beta, isMaximizingPlayer) {
+  if (depth === 0 || chessGame.game_over()) {
+    return evaluateChessBoard();
+  }
+
+  const moves = chessGame.moves();
+
+  if (isMaximizingPlayer) {
+    let bestVal = -Infinity;
+    for (let i = 0; i < moves.length; i++) {
+      chessGame.move(moves[i]);
+      bestVal = Math.max(bestVal, minimax(depth - 1, alpha, beta, !isMaximizingPlayer));
+      chessGame.undo();
+      alpha = Math.max(alpha, bestVal);
+      if (beta <= alpha) break;
+    }
+    return bestVal;
+  } else {
+    let bestVal = Infinity;
+    for (let i = 0; i < moves.length; i++) {
+      chessGame.move(moves[i]);
+      bestVal = Math.min(bestVal, minimax(depth - 1, alpha, beta, !isMaximizingPlayer));
+      chessGame.undo();
+      beta = Math.min(beta, bestVal);
+      if (beta <= alpha) break;
+    }
+    return bestVal;
+  }
+}
+
+function makeBotMove() {
+  if (chessGame.game_over()) return;
+
+  const depth = parseInt(document.getElementById('chessDiffSelect').value);
+  const moves = chessGame.moves({ verbose: true });
+  
+  let bestMove = null;
+  let bestValue = Infinity;
+
+  moves.sort(() => Math.random() - 0.5);
+
+  for (let i = 0; i < moves.length; i++) {
+    chessGame.move(moves[i].san);
+    
+    const boardValue = minimax(depth - 1, -Infinity, Infinity, true);
+    
+    chessGame.undo();
+    
+    if (boardValue < bestValue) {
+      bestValue = boardValue;
+      bestMove = moves[i];
+    }
+  }
+
+  if (bestMove) {
+    chessGame.move(bestMove.san);
+    animateChessMove(bestMove.from, bestMove.to, () => {
+      if (chessGame.game_over()) updateChessStatus();
+    });
+  }
+}
+
+createChessBoardUI();
+
+
+/* ================= ULTIMATE UNO ================= */
+const unoCOLORS = ['red', 'blue', 'green', 'yellow'];
+let unoDeck = [], unoDiscardPile = [];
+let unoPlayers = []; 
+let unoCurrentColor = '';
+let unoTurnIndex = 0; 
+let unoPlayDirection = 1; 
+let unoDifficulty = 'normal';
+let unoAwaitColorChoice = false;
+let unoHasDrawnThisTurn = false;
+let unoGameActive = false;
+
+function unoShowSetup() {
+  document.getElementById('uno-setup-screen').style.display = 'block';
+  document.getElementById('uno-game-board').style.display = 'none';
+  document.getElementById('uno-color-picker').style.display = 'none';
+  unoGameActive = false;
+}
+
+function unoStartGame() {
+  let numBots = parseInt(document.getElementById('uno-bot-count').value);
+  unoDifficulty = document.getElementById('uno-diff-level').value;
+  
+  document.getElementById('uno-setup-screen').style.display = 'none';
+  document.getElementById('uno-game-board').style.display = 'block';
+  document.getElementById('uno-pass-btn').style.display = 'none';
+
+  unoPlayers = [{ name: 'You', hand: [], isBot: false }];
+  for (let i = 1; i <= numBots; i++) {
+    unoPlayers.push({ name: `Bot ${i}`, hand: [], isBot: true });
+  }
+
+  unoBuildDeck();
+  unoShuffle(unoDeck);
+  
+  for (let i = 0; i < 7; i++) {
+    unoPlayers.forEach(p => {
+      let card = unoDrawFromDeck(); card.isNew = true;
+      p.hand.push(card);
+    });
+  }
+
+  let firstCard = unoDeck.pop();
+  while(firstCard.color === 'black' || ['Skip', 'Reverse', '+2'].includes(firstCard.value)) {
+    unoDeck.unshift(firstCard);
+    firstCard = unoDeck.pop();
+  }
+  firstCard.isNew = true; 
+  unoDiscardPile.push(firstCard);
+  unoCurrentColor = firstCard.color;
+
+  unoTurnIndex = 0;
+  unoPlayDirection = 1;
+  unoGameActive = true;
+  unoHasDrawnThisTurn = false;
+  unoAwaitColorChoice = false;
+  
+  unoUpdateUI();
+  unoLogStatus("Game Started! Your turn.");
+}
+
+function unoBuildDeck() {
+  unoDeck = [];
+  unoDiscardPile = [];
+  for (let color of unoCOLORS) {
+    unoDeck.push({ color: color, value: '0' });
+    for (let i = 1; i <= 9; i++) {
+      unoDeck.push({ color: color, value: i.toString() }, { color: color, value: i.toString() });
+    }
+    unoDeck.push({ color: color, value: 'Skip' }, { color: color, value: 'Skip' });
+    unoDeck.push({ color: color, value: 'Reverse' }, { color: color, value: 'Reverse' });
+    unoDeck.push({ color: color, value: '+2' }, { color: color, value: '+2' });
+  }
+  for (let i = 0; i < 4; i++) {
+    unoDeck.push({ color: 'black', value: 'Wild' }, { color: 'black', value: '+4' });
+  }
+}
+
+function unoShuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function unoDrawFromDeck() {
+  if (unoDeck.length === 0) {
+    let topCard = unoDiscardPile.pop();
+    unoDeck = unoDiscardPile;
+    unoDiscardPile = [topCard];
+    unoShuffle(unoDeck);
+  }
+  return unoDeck.pop();
+}
+
+function unoCreateCardHTML(card, index, isPlayer, extraClasses = "") {
+  let displayVal = card.value;
+  if (displayVal === 'Skip') displayVal = '⊘';
+  if (displayVal === 'Reverse') displayVal = '⇄';
+  if (displayVal === 'Wild') displayVal = 'W';
+  let animClass = card.isNew ? "uno-anim-draw" : "";
+  return `
+    <div class="uno-card ${card.color} ${animClass} ${extraClasses}" ${isPlayer ? `onclick="unoPlayerPlayCard(${index})"` : ''}>
+      <div class="uno-card-inner">
+        <span class="uno-corner-val uno-top-left">${displayVal}</span>
+        <div class="uno-card-oval"><span class="uno-card-value">${displayVal}</span></div>
+        <span class="uno-corner-val uno-bottom-right">${displayVal}</span>
+      </div>
+    </div>`;
+}
+
+function unoUpdateUI() {
+  if(!unoGameActive) return;
+
+  document.getElementById('uno-player-area').className = (unoTurnIndex === 0 && !unoAwaitColorChoice) ? 'active' : '';
+  document.getElementById('uno-player-hand').innerHTML = unoPlayers[0].hand.map((c, i) => unoCreateCardHTML(c, i, true)).join('');
+  unoPlayers[0].hand.forEach(c => c.isNew = false);
+
+  let botsHTML = '';
+  for (let i = 1; i < unoPlayers.length; i++) {
+    let isActive = (unoTurnIndex === i) ? 'active' : '';
+    
+    let posClass = '';
+    let rotateAngle = 0;
+    let isVertical = false;
+
+    if (unoPlayers.length === 2) {
+      posClass = 'uno-bot-top'; rotateAngle = 180;
+    } else if (unoPlayers.length === 3) {
+      if (i === 1) { posClass = 'uno-bot-left'; rotateAngle = 90; isVertical = true; }
+      if (i === 2) { posClass = 'uno-bot-right'; rotateAngle = -90; isVertical = true; }
+    } else if (unoPlayers.length === 4) {
+      if (i === 1) { posClass = 'uno-bot-left'; rotateAngle = 90; isVertical = true; }
+      if (i === 2) { posClass = 'uno-bot-top'; rotateAngle = 180; }
+      if (i === 3) { posClass = 'uno-bot-right'; rotateAngle = -90; isVertical = true; }
+    }
+
+    let handHTML = unoPlayers[i].hand.map((c, idx) => {
+      let animClass = c.isNew ? "uno-anim-draw" : "";
+      c.isNew = false;
+      
+      let marginStyle = '';
+      if (isVertical && idx > 0) marginStyle = 'margin-top: -50px;';
+      else if (!isVertical && idx > 0) marginStyle = 'margin-left: -30px;';
+      
+      return `
+      <div style="${marginStyle} transform: rotate(${rotateAngle}deg);">
+        <div class="uno-card uno-card-back uno-mini-card ${animClass}" style="margin:0;">UNO</div>
+      </div>`;
+    }).join('');
+    
+    botsHTML += `
+      <div class="uno-bot-area ${posClass} ${isActive}" id="uno-bot-${i}">
+        <h4>${unoPlayers[i].name} (${unoPlayers[i].hand.length})</h4>
+        <div class="uno-bot-hand">${handHTML}</div>
+      </div>`;
+  }
+  document.getElementById('uno-bots-wrapper').innerHTML = botsHTML;
+
+  let discardHTML = '';
+  let startIdx = Math.max(0, unoDiscardPile.length - 6);
+  for (let i = startIdx; i < unoDiscardPile.length; i++) {
+    let card = unoDiscardPile[i];
+    let displayCard = {...card}; 
+    if(i === unoDiscardPile.length - 1 && card.color === 'black') displayCard.color = unoCurrentColor; 
+    
+    let rotation = (Math.sin(i * 12.34) * 25).toFixed(1); 
+    let extraClasses = "uno-discarded-card" + (i === unoDiscardPile.length - 1 && card.isNew ? " uno-anim-drop" : "");
+    card.isNew = false;
+    discardHTML += `<div style="position: absolute; transform: rotate(${rotation}deg); transform-origin: center;">${unoCreateCardHTML(displayCard, -1, false, extraClasses)}</div>`;
+  }
+  document.getElementById('uno-discard-pile').innerHTML = discardHTML;
+
+  document.getElementById('uno-direction-indicator').innerText = unoPlayDirection === 1 ? '↻ Play Direction ↻' : '↺ Play Direction ↺';
+  document.getElementById('uno-direction-indicator').style.color = (unoPlayDirection === 1) ? 'var(--gold)' : 'var(--green)';
+}
+
+function unoLogStatus(msg) {
+  document.getElementById('uno-status').innerText = msg;
+}
+
+function unoIsValidPlay(card) {
+  let topCard = unoDiscardPile[unoDiscardPile.length - 1];
+  return card.color === 'black' || card.color === unoCurrentColor || card.value === topCard.value;
+}
+
+function unoGetNextPlayerIndex(steps = 1) {
+  let next = (unoTurnIndex + (unoPlayDirection * steps)) % unoPlayers.length;
+  if (next < 0) next += unoPlayers.length;
+  return next;
+}
+
+function unoPlayerDrawAction() {
+  if (unoTurnIndex !== 0 || unoAwaitColorChoice || !unoGameActive || unoHasDrawnThisTurn) return;
+  
+  let card = unoDrawFromDeck();
+  card.isNew = true;
+  unoPlayers[0].hand.push(card);
+  unoHasDrawnThisTurn = true;
+  
+  if (unoIsValidPlay(card)) {
+    unoLogStatus("You drew a playable card! Play it or End Turn.");
+    document.getElementById('uno-pass-btn').style.display = 'block';
+    unoUpdateUI();
+  } else {
+    unoLogStatus("You drew a card. No valid plays.");
+    unoUpdateUI();
+    setTimeout(unoEndTurn, 1000);
+  }
+}
+
+function unoPlayerPlayCard(index) {
+  if (unoTurnIndex !== 0 || unoAwaitColorChoice || !unoGameActive) return;
+  
+  let card = unoPlayers[0].hand[index];
+  if (unoIsValidPlay(card)) {
+    document.getElementById('uno-pass-btn').style.display = 'none';
+    card.isNew = true;
+    unoPlayers[0].hand.splice(index, 1);
+    unoDiscardPile.push(card);
+    
+    if (unoPlayers[0].hand.length === 0) { unoWinGame(0); return; }
+    if (unoPlayers[0].hand.length === 1) unoLogStatus("You yelled UNO!");
+
+    if (card.color === 'black') {
+      unoAwaitColorChoice = true;
+      document.getElementById('uno-color-picker').style.display = 'block';
+      unoUpdateUI();
+    } else {
+      unoCurrentColor = card.color;
+      unoApplyCardEffectAndAdvance(card);
+    }
+  }
+}
+
+function unoPlayerSetColor(color) {
+  unoCurrentColor = color;
+  unoAwaitColorChoice = false;
+  document.getElementById('uno-color-picker').style.display = 'none';
+  unoApplyCardEffectAndAdvance(unoDiscardPile[unoDiscardPile.length - 1]);
+}
+
+function unoEndTurn() {
+  document.getElementById('uno-pass-btn').style.display = 'none';
+  unoAdvanceTurn();
+}
+
+function unoTriggerBotTurn() {
+  if (!unoGameActive) return;
+  let bot = unoPlayers[unoTurnIndex];
+  unoLogStatus(`${bot.name} is thinking...`);
+  unoUpdateUI();
+
+  setTimeout(() => {
+    let nextPlayerSize = unoPlayers[unoGetNextPlayerIndex(1)].hand.length;
+    let chosenIndex = unoBotChooseCard(bot.hand, nextPlayerSize);
+
+    if (chosenIndex !== -1) {
+      let card = bot.hand.splice(chosenIndex, 1)[0];
+      card.isNew = true;
+      unoDiscardPile.push(card);
+      
+      if (bot.hand.length === 0) { unoWinGame(unoTurnIndex); return; }
+      if (bot.hand.length === 1) unoLogStatus(`${bot.name} calls UNO!`);
+      else unoLogStatus(`${bot.name} played a card.`);
+
+      if (card.color === 'black') {
+        let counts = { red:0, blue:0, green:0, yellow:0 };
+        bot.hand.forEach(c => { if(c.color !== 'black') counts[c.color]++; });
+        unoCurrentColor = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+        if(counts[unoCurrentColor] === 0) unoCurrentColor = unoCOLORS[Math.floor(Math.random()*unoCOLORS.length)];
+      } else {
+        unoCurrentColor = card.color;
+      }
+      unoApplyCardEffectAndAdvance(card);
+
+    } else {
+      let card = unoDrawFromDeck();
+      card.isNew = true;
+      bot.hand.push(card);
+      
+      if (unoIsValidPlay(card)) {
+        bot.hand.pop();
+        unoDiscardPile.push(card);
+        unoLogStatus(`${bot.name} drew and played!`);
+        
+        if (card.color === 'black') unoCurrentColor = unoCOLORS[Math.floor(Math.random()*unoCOLORS.length)];
+        else unoCurrentColor = card.color;
+        
+        unoApplyCardEffectAndAdvance(card);
+      } else {
+        unoLogStatus(`${bot.name} drew a card.`);
+        unoAdvanceTurn();
+      }
+    }
+  }, 1500);
+}
+
+function unoBotChooseCard(hand, nextSize) {
+  let valid = hand.map((c, i) => ({card: c, index: i})).filter(obj => unoIsValidPlay(obj.card));
+  if (valid.length === 0) return -1;
+
+  if (unoDifficulty === 'easy') {
+    return valid[Math.floor(Math.random() * valid.length)].index;
+  }
+
+  valid.forEach(v => {
+    v.score = 0;
+    if (v.card.color === 'black') v.score -= 50; 
+    if (['Skip', 'Reverse', '+2'].includes(v.card.value)) v.score += 10;
+  });
+
+  if (unoDifficulty === 'hard' || unoDifficulty === 'ultra') {
+    if (nextSize <= 2) { 
+      valid.forEach(v => {
+        if (['Skip', 'Reverse', '+2'].includes(v.card.value)) v.score += 100;
+        if (v.card.value === '+4') v.score += 200;
+      });
+    }
+    if (unoDifficulty === 'ultra') { 
+      let colorCounts = {};
+      hand.forEach(c => { if(c.color !== 'black') colorCounts[c.color] = (colorCounts[c.color] || 0) + 1 });
+      valid.forEach(v => {
+        if (v.card.color !== 'black') v.score += (colorCounts[v.card.color] || 0) * 5;
+      });
+    }
+  }
+  
+  valid.sort((a, b) => b.score - a.score);
+  return valid[0].index;
+}
+
+function unoApplyCardEffectAndAdvance(card) {
+  let skipNext = false;
+  let nextIdx = unoGetNextPlayerIndex(1);
+  let targetPlayer = unoPlayers[nextIdx];
+
+  if (card.value === 'Reverse') {
+    if (unoPlayers.length === 2) {
+      skipNext = true; 
+    } else {
+      unoPlayDirection *= -1;
+      nextIdx = unoGetNextPlayerIndex(1); 
+      targetPlayer = unoPlayers[nextIdx];
+    }
+  } else if (card.value === 'Skip') {
+    skipNext = true;
+  } else if (card.value === '+2') {
+    for(let i=0; i<2; i++) { let c = unoDrawFromDeck(); c.isNew = true; targetPlayer.hand.push(c); }
+    skipNext = true;
+    unoLogStatus(`${targetPlayer.name} takes 2!`);
+  } else if (card.value === '+4') {
+    for(let i=0; i<4; i++) { let c = unoDrawFromDeck(); c.isNew = true; targetPlayer.hand.push(c); }
+    skipNext = true;
+    unoLogStatus(`${targetPlayer.name} takes 4!`);
+  }
+
+  unoUpdateUI();
+  setTimeout(() => unoAdvanceTurn(skipNext), 800);
+}
+
+function unoAdvanceTurn(skipped = false) {
+  if (!unoGameActive) return;
+  
+  unoHasDrawnThisTurn = false;
+  unoTurnIndex = unoGetNextPlayerIndex(1);
+  
+  if (skipped) {
+    unoLogStatus(`${unoPlayers[unoTurnIndex].name} was skipped!`);
+    unoTurnIndex = unoGetNextPlayerIndex(1);
+  }
+
+  unoUpdateUI();
+
+  if (unoTurnIndex === 0) unoLogStatus("Your Turn!");
+  else unoTriggerBotTurn();
+}
+
+function unoWinGame(winnerIndex) {
+  unoGameActive = false;
+  unoUpdateUI();
+  if (winnerIndex === 0) unoLogStatus("🎉 YOU WON! 🎉");
+  else unoLogStatus(`🤖 ${unoPlayers[winnerIndex].name} WON! 🤖`);
+}
+
+
+/* ================= DOTS AND BOXES ================= */
+let dotsGridSize = 6; 
+let dotsCellSize = 70; 
+let dotsDotSize = 16; 
+let dotsLineThickness = 16; 
+
+let dotsHorizontalLines = [];
+let dotsVerticalLines = [];
+let dotsBoxes = [];
+let dotsCurrentPlayer = 1;
+let dotsScores = { 1: 0, 2: 0 };
+let dotsTotalBoxes = (dotsGridSize - 1) * (dotsGridSize - 1);
+let dotsPlayingVsBot = false;
+
+const dotsBoardEl = document.getElementById('dots-board');
+
+function dotsChangeTheme(theme) {
+  const wrapper = document.getElementById('dotsWrapper');
+  wrapper.setAttribute('data-theme', theme);
+}
+
+function dotsInitGame(vsBot) {
+  dotsPlayingVsBot = vsBot;
+  document.getElementById('dots-p2-name').innerText = vsBot ? "AI Bot" : "Player 2";
+
+  dotsBoardEl.innerHTML = '';
+  dotsHorizontalLines = Array.from({ length: dotsGridSize }, () => Array(dotsGridSize - 1).fill(false));
+  dotsVerticalLines = Array.from({ length: dotsGridSize - 1 }, () => Array(dotsGridSize).fill(false));
+  dotsBoxes = Array.from({ length: dotsGridSize - 1 }, () => Array(dotsGridSize - 1).fill(0));
+  
+  dotsCurrentPlayer = 1;
+  dotsScores = { 1: 0, 2: 0 };
+  dotsUpdateScoreUI();
+  document.getElementById('dotsWinnerModal').classList.remove('show');
+
+  const boardWidth = (dotsGridSize - 1) * dotsCellSize;
+  dotsBoardEl.style.width = `${boardWidth}px`;
+  dotsBoardEl.style.height = `${boardWidth}px`;
+
+  dotsCreateElements();
+}
+
+function dotsCreateElements() {
+  const offset = dotsDotSize / 2;
+
+  for (let r = 0; r < dotsGridSize - 1; r++) {
+    for (let c = 0; c < dotsGridSize - 1; c++) {
+      const box = document.createElement('div');
+      box.classList.add('dots-box');
+      box.id = `dots-box-${r}-${c}`;
+      box.style.top = `${r * dotsCellSize + offset}px`;
+      box.style.left = `${c * dotsCellSize + offset}px`;
+      box.style.width = `${dotsCellSize}px`;
+      box.style.height = `${dotsCellSize}px`;
+      dotsBoardEl.appendChild(box);
+    }
+  }
+
+  for (let r = 0; r < dotsGridSize; r++) {
+    for (let c = 0; c < dotsGridSize - 1; c++) {
+      const line = document.createElement('div');
+      line.classList.add('dots-line');
+      line.id = `dots-h-${r}-${c}`;
+      line.style.top = `${r * dotsCellSize + offset - dotsLineThickness / 2}px`;
+      line.style.left = `${c * dotsCellSize + offset}px`;
+      line.style.width = `${dotsCellSize}px`;
+      line.style.height = `${dotsLineThickness}px`;
+      line.addEventListener('click', () => dotsHandleLineClick('h', r, c, line));
+      dotsBoardEl.appendChild(line);
+    }
+  }
+
+  for (let r = 0; r < dotsGridSize - 1; r++) {
+    for (let c = 0; c < dotsGridSize; c++) {
+      const line = document.createElement('div');
+      line.classList.add('dots-line');
+      line.id = `dots-v-${r}-${c}`;
+      line.style.top = `${r * dotsCellSize + offset}px`;
+      line.style.left = `${c * dotsCellSize + offset - dotsLineThickness / 2}px`;
+      line.style.width = `${dotsLineThickness}px`;
+      line.style.height = `${dotsCellSize}px`;
+      line.addEventListener('click', () => dotsHandleLineClick('v', r, c, line));
+      dotsBoardEl.appendChild(line);
+    }
+  }
+
+  for (let r = 0; r < dotsGridSize; r++) {
+    for (let c = 0; c < dotsGridSize; c++) {
+      const dot = document.createElement('div');
+      dot.classList.add('dots-dot');
+      dot.style.width = `${dotsDotSize}px`;
+      dot.style.height = `${dotsDotSize}px`;
+      dot.style.top = `${r * dotsCellSize}px`;
+      dot.style.left = `${c * dotsCellSize}px`;
+      dotsBoardEl.appendChild(dot);
+    }
+  }
+}
+
+function dotsHandleLineClick(type, r, c, element, isBotAction = false) {
+  if (dotsPlayingVsBot && dotsCurrentPlayer === 2 && !isBotAction) return;
+  if (type === 'h' && dotsHorizontalLines[r][c]) return;
+  if (type === 'v' && dotsVerticalLines[r][c]) return;
+
+  if (type === 'h') dotsHorizontalLines[r][c] = true;
+  else dotsVerticalLines[r][c] = true;
+
+  element.classList.add('claimed', `p${dotsCurrentPlayer}`);
+
+  let boxCompleted = dotsCheckBoxes(type, r, c);
+
+  if (boxCompleted) {
+    if (dotsScores[1] + dotsScores[2] === dotsTotalBoxes) {
+      dotsEndGame();
+    } else if (dotsPlayingVsBot && dotsCurrentPlayer === 2) {
+      setTimeout(dotsMakeBotMove, 800); 
+    }
+  } else {
+    dotsCurrentPlayer = dotsCurrentPlayer === 1 ? 2 : 1;
+    dotsUpdateScoreUI();
+    
+    if (dotsPlayingVsBot && dotsCurrentPlayer === 2) {
+      setTimeout(dotsMakeBotMove, 800); 
+    }
+  }
+}
+
+function dotsCheckBoxes(type, r, c) {
+  let scored = false;
+  if (type === 'h') {
+    if (r > 0) scored = dotsEvaluateBox(r - 1, c) || scored;
+    if (r < dotsGridSize - 1) scored = dotsEvaluateBox(r, c) || scored;
+  } else if (type === 'v') {
+    if (c > 0) scored = dotsEvaluateBox(r, c - 1) || scored;
+    if (c < dotsGridSize - 1) scored = dotsEvaluateBox(r, c) || scored;
+  }
+  return scored;
+}
+
+function dotsEvaluateBox(r, c) {
+  if (dotsHorizontalLines[r][c] && dotsHorizontalLines[r + 1][c] && dotsVerticalLines[r][c] && dotsVerticalLines[r][c + 1]) {
+    if (dotsBoxes[r][c] !== 0) return false;
+
+    dotsBoxes[r][c] = dotsCurrentPlayer;
+    dotsScores[dotsCurrentPlayer]++;
+    
+    const boxEl = document.getElementById(`dots-box-${r}-${c}`);
+    boxEl.classList.add(`p${dotsCurrentPlayer}`);
+    
+    document.getElementById(`dots-score${dotsCurrentPlayer}`).innerText = dotsScores[dotsCurrentPlayer];
+    return true;
+  }
+  return false;
+}
+
+function dotsUpdateScoreUI() {
+  const p1Panel = document.getElementById('dots-p1-panel');
+  const p2Panel = document.getElementById('dots-p2-panel');
+
+  if (dotsCurrentPlayer === 1) {
+    p1Panel.classList.add('active-p1');
+    p2Panel.classList.remove('active-p2');
+  } else {
+    p2Panel.classList.add('active-p2');
+    p1Panel.classList.remove('active-p1');
+  }
+}
+
+function dotsCountLines(r, c) {
+  let count = 0;
+  if (dotsHorizontalLines[r][c]) count++;
+  if (dotsHorizontalLines[r + 1][c]) count++;
+  if (dotsVerticalLines[r][c]) count++;
+  if (dotsVerticalLines[r][c + 1]) count++;
+  return count;
+}
+
+function dotsMakeBotMove() {
+  if (dotsCurrentPlayer !== 2) return;
+  if (dotsScores[1] + dotsScores[2] === dotsTotalBoxes) return; 
+
+  let emptyLines = [];
+  
+  for (let r = 0; r < dotsGridSize; r++) {
+    for (let c = 0; c < dotsGridSize - 1; c++) {
+      if (!dotsHorizontalLines[r][c]) emptyLines.push({ type: 'h', r, c });
+    }
+  }
+  for (let r = 0; r < dotsGridSize - 1; r++) {
+    for (let c = 0; c < dotsGridSize; c++) {
+      if (!dotsVerticalLines[r][c]) emptyLines.push({ type: 'v', r, c });
+    }
+  }
+
+  if (emptyLines.length === 0) return;
+
+  let chosenLine = null;
+  let safeLines = [];
+
+  for (let line of emptyLines) {
+    if (line.type === 'h') {
+      if (line.r > 0 && dotsCountLines(line.r - 1, line.c) === 3) chosenLine = line;
+      if (line.r < dotsGridSize - 1 && dotsCountLines(line.r, line.c) === 3) chosenLine = line;
+    } else {
+      if (line.c > 0 && dotsCountLines(line.r, line.c - 1) === 3) chosenLine = line;
+      if (line.c < dotsGridSize - 1 && dotsCountLines(line.r, line.c) === 3) chosenLine = line;
+    }
+    if (chosenLine) break; 
+  }
+
+  if (!chosenLine) {
+    for (let line of emptyLines) {
+      let isSafe = true;
+      if (line.type === 'h') {
+        if (line.r > 0 && dotsCountLines(line.r - 1, line.c) === 2) isSafe = false;
+        if (line.r < dotsGridSize - 1 && dotsCountLines(line.r, line.c) === 2) isSafe = false;
+      } else {
+        if (line.c > 0 && dotsCountLines(line.r, line.c - 1) === 2) isSafe = false;
+        if (line.c < dotsGridSize - 1 && dotsCountLines(line.r, line.c) === 2) isSafe = false;
+      }
+      if (isSafe) safeLines.push(line);
+    }
+
+    if (safeLines.length > 0) {
+      chosenLine = safeLines[Math.floor(Math.random() * safeLines.length)]; 
+    } else {
+      chosenLine = emptyLines[Math.floor(Math.random() * emptyLines.length)]; 
+    }
+  }
+
+  let elementId = chosenLine.type === 'h' ? `dots-h-${chosenLine.r}-${chosenLine.c}` : `dots-v-${chosenLine.r}-${chosenLine.c}`;
+  let el = document.getElementById(elementId);
+  dotsHandleLineClick(chosenLine.type, chosenLine.r, chosenLine.c, el, true);
+}
+
+function dotsEndGame() {
+  const modal = document.getElementById('dotsWinnerModal');
+  const winnerText = document.getElementById('dotsWinnerText');
+
+  if (dotsScores[1] > dotsScores[2]) {
+    winnerText.innerText = 'Player 1 Wins!';
+    winnerText.style.color = 'var(--dots-p1-color)';
+  } else if (dotsScores[2] > dotsScores[1]) {
+    winnerText.innerText = dotsPlayingVsBot ? 'AI Bot Wins!' : 'Player 2 Wins!';
+    winnerText.style.color = 'var(--dots-p2-color)';
+  } else {
+    winnerText.innerText = 'It\'s a Tie!';
+    winnerText.style.color = 'var(--dots-text-main)';
+  }
+
+  modal.classList.add('show');
+}
+
+// Init Dots and Boxes game on load
+dotsInitGame(false);
+
+
+/* ================= CARD MATCHING GAME (MEMORY) ================= */
+const memoryGameBoard = document.getElementById('memory-game-board');
+const memoryStartBtn = document.getElementById('memory-start-btn');
+const memoryStatusMessage = document.getElementById('memory-status-message');
+const memoryP1Panel = document.getElementById('memory-p1-panel');
+const memoryP2Panel = document.getElementById('memory-p2-panel');
+const memoryP1ScoreDisplay = document.getElementById('memory-p1-score');
+const memoryP2ScoreDisplay = document.getElementById('memory-p2-score');
+
+const memoryEmojiPool = [
+    '🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯',
+    '🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🐤','🦆',
+    '🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋',
+    '🐌','🐞','🐜','🦟','🐢','🐍','🦎','🦖','🦕','🐙',
+    '🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🦈'
+];
+
+let memoryCards = [];
+let memoryFlippedCards = [];
+let memoryCurrentPlayer = 1;
+let memoryScores = { 1: 0, 2: 0 };
+let memoryLockBoard = true; 
+let memoryTotalPairs = 0;
+let memoryMatchedPairs = 0;
+let memoryCountdownInterval;
+
+function memoryStartGame() {
+    clearInterval(memoryCountdownInterval);
+    
+    const size = parseInt(document.getElementById('memory-grid-size').value);
+    memoryTotalPairs = (size * size) / 2;
+    
+    document.getElementById('view-memory').style.setProperty('--memory-grid-size', size);
+    
+    memoryGameBoard.innerHTML = '';
+    memoryFlippedCards = [];
+    memoryCurrentPlayer = 1;
+    memoryScores = { 1: 0, 2: 0 };
+    memoryMatchedPairs = 0;
+    memoryLockBoard = true; 
+    
+    memoryUpdateUI();
+
+    let selectedEmojis = memoryEmojiPool.slice(0, memoryTotalPairs);
+    memoryCards = [...selectedEmojis, ...selectedEmojis];
+    memoryShuffle(memoryCards);
+
+    memoryCards.forEach((symbol) => {
+        const card = document.createElement('div');
+        card.classList.add('memory-card');
+        card.dataset.symbol = symbol;
+        
+        card.innerHTML = `
+            <div class="memory-card-back"></div>
+            <div class="memory-card-face">${symbol}</div>
+        `;
+        
+        card.addEventListener('click', memoryFlipCard);
+        memoryGameBoard.appendChild(card);
+    });
+
+    memoryStartPreview(size);
+}
+
+function memoryStartPreview(size) {
+    memoryStartBtn.disabled = true;
+    let timeLeft = size; 
+    
+    memoryStatusMessage.innerHTML = `Memorize the cards! <span style="color: #ff4757;">(${timeLeft}s)</span>`;
+
+    const allCards = document.querySelectorAll('.memory-card');
+    
+    setTimeout(() => {
+        allCards.forEach(card => card.classList.add('flipped'));
+    }, 100);
+
+    memoryCountdownInterval = setInterval(() => {
+        timeLeft--;
+        
+        if (timeLeft > 0) {
+            memoryStatusMessage.innerHTML = `Memorize the cards! <span style="color: #ff4757;">(${timeLeft}s)</span>`;
+        } else {
+            clearInterval(memoryCountdownInterval);
+            allCards.forEach(card => card.classList.remove('flipped'));
+            memoryLockBoard = false;
+            memoryStartBtn.disabled = false;
+            
+            memoryStatusMessage.innerText = "Player 1's Turn";
+            memoryStatusMessage.style.color = "var(--p1-color)";
+        }
+    }, 1000);
+}
+
+function memoryShuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function memoryFlipCard() {
+    if (memoryLockBoard) return;
+    if (this === memoryFlippedCards[0]) return;
+    if (this.classList.contains('matched-p1') || this.classList.contains('matched-p2')) return;
+
+    this.classList.add('flipped');
+    memoryFlippedCards.push(this);
+
+    if (memoryFlippedCards.length === 2) {
+        memoryCheckForMatch();
+    }
+}
+
+function memoryCheckForMatch() {
+    const isMatch = memoryFlippedCards[0].dataset.symbol === memoryFlippedCards[1].dataset.symbol;
+
+    if (isMatch) {
+        memoryHandleMatch();
+    } else {
+        memoryHandleMismatch();
+    }
+}
+
+function memoryHandleMatch() {
+    memoryLockBoard = true;
+    
+    setTimeout(() => {
+        memoryFlippedCards[0].classList.add(`matched-p${memoryCurrentPlayer}`);
+        memoryFlippedCards[1].classList.add(`matched-p${memoryCurrentPlayer}`);
+        
+        memoryScores[memoryCurrentPlayer]++;
+        memoryMatchedPairs++;
+        memoryUpdateUI();
+        
+        memoryFlippedCards = [];
+        
+        if (memoryMatchedPairs === memoryTotalPairs) {
+            memoryDeclareWinner();
+        } else {
+            memoryStatusMessage.innerText = `Player ${memoryCurrentPlayer} got a match! Go again.`;
+            memoryLockBoard = false;
+        }
+    }, 500);
+}
+
+function memoryHandleMismatch() {
+    memoryLockBoard = true;
+
+    setTimeout(() => {
+        memoryFlippedCards[0].classList.remove('flipped');
+        memoryFlippedCards[1].classList.remove('flipped');
+        
+        memoryCurrentPlayer = memoryCurrentPlayer === 1 ? 2 : 1;
+        memoryFlippedCards = [];
+        memoryLockBoard = false;
+        
+        memoryUpdateUI();
+        memoryStatusMessage.innerText = `Player ${memoryCurrentPlayer}'s Turn`;
+        memoryStatusMessage.style.color = memoryCurrentPlayer === 1 ? "var(--p1-color)" : "var(--p2-color)";
+        
+    }, 1000);
+}
+
+function memoryUpdateUI() {
+    memoryP1ScoreDisplay.innerText = memoryScores[1];
+    memoryP2ScoreDisplay.innerText = memoryScores[2];
+    
+    if (memoryCurrentPlayer === 1) {
+        memoryP1Panel.classList.add('memory-active-p1');
+        memoryP2Panel.classList.remove('memory-active-p2');
+    } else {
+        memoryP2Panel.classList.add('memory-active-p2');
+        memoryP1Panel.classList.remove('memory-active-p1');
+    }
+}
+
+function memoryDeclareWinner() {
+    let winText = "";
+    let color = "#4cd137"; 
+
+    if (memoryScores[1] > memoryScores[2]) {
+        winText = "Player 1 Wins!";
+        color = "var(--p1-color)";
+    } else if (memoryScores[2] > memoryScores[1]) {
+        winText = "Player 2 Wins!";
+        color = "var(--p2-color)";
+    } else {
+        winText = "It's a Tie!";
+        color = "var(--gold)";
+    }
+
+    memoryStatusMessage.innerText = `Game Over! ${winText}`;
+    memoryStatusMessage.style.color = color;
+    memoryP1Panel.classList.add('memory-active-p1');
+    memoryP2Panel.classList.add('memory-active-p2');
+}
+
+// Start memory game setup logic
+memoryStartGame();
+
+
+/* ================= AUDIO BEEP HELPER ================= */
+let _audioCtx = null;
+function unlockAudio() {
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  } catch(e) {}
+  document.removeEventListener('click', unlockAudio);
+  document.removeEventListener('keydown', unlockAudio);
+}
+document.addEventListener('click', unlockAudio);
+document.addEventListener('keydown', unlockAudio);
+
+function beep(freq=880, duration=180, delay=0){
+  try{
+    if(!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = _audioCtx.currentTime + delay;
+    const osc = _audioCtx.createOscillator();
+    const gain = _audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.25, t0+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0+duration/1000);
+    osc.connect(gain).connect(_audioCtx.destination);
+    osc.start(t0);
+    osc.stop(t0+duration/1000+0.02);
+  }catch(e){ }
+}
+
+/* ================= CALCULATOR ================= */
+const calcPrevEl = document.getElementById('calcPrev');
+const calcCurrEl = document.getElementById('calcCurr');
+let calc = { curr:'0', prev:'', op:null, resetNext:false };
+function calcFormat(numStr){
+  if(numStr==='' || numStr==='-') return numStr;
+  const n = parseFloat(numStr);
+  if(isNaN(n)) return '0';
+  if(!isFinite(n)) return 'Error';
+  let str = numStr.includes('.') ? numStr : n.toString();
+  if(Math.abs(n) >= 1e12) str = n.toExponential(4);
+  return str;
+}
+function calcRender(){
+  calcCurrEl.textContent = calcFormat(calc.curr);
+  calcPrevEl.textContent = calc.prev ? `${calc.prev} ${calc.op||''}` : '\u00A0';
+}
+function calcClear(){ calc = { curr:'0', prev:'', op:null, resetNext:false }; calcRender(); }
+function calcDigit(d){
+  if(calc.resetNext){ calc.curr = ''; calc.resetNext = false; }
+  if(d==='.' && calc.curr.includes('.')) return;
+  if(calc.curr==='0' && d!=='.') calc.curr = d;
+  else calc.curr += d;
+  calcRender();
+}
+function calcBackspace(){
+  if(calc.resetNext) return;
+  calc.curr = calc.curr.slice(0,-1);
+  if(calc.curr===''||calc.curr==='-') calc.curr = '0';
+  calcRender();
+}
+function calcSign(){
+  if(calc.curr==='0') return;
+  calc.curr = calc.curr.startsWith('-') ? calc.curr.slice(1) : '-'+calc.curr;
+  calcRender();
+}
+function calcPercent(){
+  calc.curr = String(parseFloat(calc.curr||'0')/100);
+  calcRender();
+}
+function calcCompute(a,b,op){
+  a = parseFloat(a); b = parseFloat(b);
+  let result;
+  switch(op){
+    case '+': result = a+b; break;
+    case '−': result = a-b; break;
+    case '×': result = a*b; break;
+    case '÷': result = b===0 ? NaN : a/b; break;
+    default: return b;
+  }
+  return parseFloat(result.toPrecision(12));
+}
+function calcChooseOp(op){
+  if(calc.op && !calc.resetNext){
+    calc.curr = String(calcCompute(calc.prev, calc.curr, calc.op));
+  }
+  calc.prev = calc.curr;
+  calc.op = op;
+  calc.resetNext = true;
+  calcRender();
+}
+function calcEquals(){
+  if(!calc.op) return;
+  calc.curr = String(calcCompute(calc.prev, calc.curr, calc.op));
+  calc.prev = '';
+  calc.op = null;
+  calc.resetNext = true;
+  calcRender();
+}
+document.getElementById('calcGrid').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  if(btn.dataset.digit!==undefined) calcDigit(btn.dataset.digit);
+  else if(btn.dataset.op) calcChooseOp(btn.dataset.op);
+  else if(btn.dataset.act==='clear') calcClear();
+  else if(btn.dataset.act==='back') calcBackspace();
+  else if(btn.dataset.act==='sign') calcSign();
+  else if(btn.dataset.act==='percent') calcPercent();
+  else if(btn.dataset.act==='equals') calcEquals();
+});
+document.getElementById('calcResetBtn').addEventListener('click', calcClear);
+document.addEventListener('keydown', (e)=>{
+  const view = document.getElementById('view-calc');
+  if(!view.classList.contains('active')) return;
+  if(e.key>=  '0' && e.key<='9') calcDigit(e.key);
+  else if(e.key==='.') calcDigit('.');
+  else if(e.key==='+') calcChooseOp('+');
+  else if(e.key==='-') calcChooseOp('−');
+  else if(e.key==='*') calcChooseOp('×');
+  else if(e.key==='/'){ e.preventDefault(); calcChooseOp('÷'); }
+  else if(e.key==='Enter' || e.key==='='){ e.preventDefault(); calcEquals(); }
+  else if(e.key==='Backspace') calcBackspace();
+  else if(e.key==='Escape') calcClear();
+  else if(e.key==='%') calcPercent();
+});
+calcRender();
+    </script>
+</body>
+</html>

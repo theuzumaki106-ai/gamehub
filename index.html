@@ -534,6 +534,7 @@
   </section>
 
   <!-- CALCULATOR -->
+    
   <section class="view" id="view-calc">
     <button class="back-link" data-goto="hub">← Back to hub</button>
     <div class="panel">
@@ -575,9 +576,34 @@
       </div>
     </div>
   </section>
+    <!-- 1. Add this to your Side Navigation -->
+<button class="nav-btn" data-target="canvas-studio-section">CanvasStudio</button>
+
+<!-- 2. Add this alongside your other game sections -->
+<section id="canvas-studio-section" style="display: none;">
+  <!-- Paste everything from <header class="top-bar"> down to the <input type="file"> here -->
+</section>
 
 </div>
 <script>
+
+    // Add this logic to your main navigation click handler
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    // Hide all sections
+    document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+    
+    // Show target section
+    const targetId = e.target.getAttribute('data-target');
+    document.getElementById(targetId).style.display = 'flex'; // Use flex for CanvasStudio
+
+    // Initialize CanvasStudio only once when its tab is clicked
+    if (targetId === 'canvas-studio-section' && !window.app) {
+      window.app = new DrawingApp();
+    }
+  });
+});
+    
 /* ---------------- Navigation ---------------- */
 let goto = function(view){
   const views = document.querySelectorAll('.view');

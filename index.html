@@ -29,7 +29,7 @@
       <button data-view="dots">Dots &amp; Boxes</button>
       <button data-view="memory">Memory</button>
       <span class="tab-divider"></span>
-      <button data-view="calc">Calculator</button>
+      
     </nav>
   </header>
 
@@ -37,6 +37,15 @@
   <section class="view active" id="view-hub">
     <h3 class="section-label">🎲 Games</h3>
     <div class="hub-grid">
+        <div class="game-card" data-goto="uno">
+  <div class="eyebrow">Play Self And VS Bot</div>
+  <h2>UNO</h2>
+  <p>Race to clear your hand in this classic card game. Match colors, stack action cards, and don't forget to call out!</p>
+  <a href="ultimateuno.html">
+    <button class="play-btn">Play now →</button>
+  </a>
+  <div class="card-glyph">🔃</div>
+</div>
       <div class="game-card" data-goto="sl">
         <div class="eyebrow">Board · 1-6 Players · 3D Mode</div>
         <h2>Snakes &amp; Ladders</h2>
@@ -97,13 +106,15 @@
 
     <h3 class="section-label">🧰 Apps</h3>
     <div class="hub-grid">
-      <div class="game-card app" data-goto="calc">
-        <div class="eyebrow">Utility · Arithmetic</div>
-        <h2>Calculator</h2>
-        <p>A clean, full-keypad calculator with percent, sign toggle, backspace, and keyboard support.</p>
-        <button class="play-btn">Open →</button>
-        <div class="card-glyph">🧮</div>
-      </div>
+      <div class="game-card app" data-goto="typing">
+  <div class="eyebrow">Terminal · Speed Practice</div>
+  <h2>Terminal Typing Test</h2>
+  <p>Test your typing speed in a retro command-line environment. Track your WPM, accuracy, and practice raw coding speed.</p>
+  <a href="terminaltypingtest.html">
+    <button class="play-btn">Open →</button>
+  </a>
+  <div class="card-glyph">⌨️</div>
+</div>
         <div class="game-card app" data-goto="calc">
         <div class="eyebrow">CREATIVE DESIGN</div>
         <h2>Canvas Studio</h2>
@@ -542,49 +553,13 @@
     </div>
   </section>
 
-  <!-- CALCULATOR -->
-    
-  <section class="view" id="view-calc">
-    <button class="back-link" data-goto="hub">← Back to hub</button>
-    <div class="panel">
-      <div class="panel-head">
-        <h2>Calculator</h2>
-        <button class="reset-btn" id="calcResetBtn">Clear all</button>
-      </div>
-      <div class="calc-wrap">
-        <div class="calc-display">
-          <div class="prev" id="calcPrev">&nbsp;</div>
-          <div class="curr" id="calcCurr">0</div>
-        </div>
-        <div class="calc-grid" id="calcGrid">
-          <button class="calc-btn func" data-act="clear">C</button>
-          <button class="calc-btn func" data-act="back">⌫</button>
-          <button class="calc-btn func" data-act="percent">%</button>
-          <button class="calc-btn op" data-op="÷">÷</button>
+<footer style="text-align: center; padding: 20px; font-family: sans-serif; color: #ffffff;">
+  <p style="margin: 0; font-size: 14px;">
+    This code created by © <span style="color: #007bff;">Viswajeet Studio</span> ©
+  </p>
+</footer>
 
-          <button class="calc-btn" data-digit="7">7</button>
-          <button class="calc-btn" data-digit="8">8</button>
-          <button class="calc-btn" data-digit="9">9</button>
-          <button class="calc-btn op" data-op="×">×</button>
-
-          <button class="calc-btn" data-digit="4">4</button>
-          <button class="calc-btn" data-digit="5">5</button>
-          <button class="calc-btn" data-digit="6">6</button>
-          <button class="calc-btn op" data-op="−">−</button>
-
-          <button class="calc-btn" data-digit="1">1</button>
-          <button class="calc-btn" data-digit="2">2</button>
-          <button class="calc-btn" data-digit="3">3</button>
-          <button class="calc-btn op" data-op="+">+</button>
-
-          <button class="calc-btn func" data-act="sign">±</button>
-          <button class="calc-btn zero" data-digit="0">0</button>
-          <button class="calc-btn" data-digit=".">.</button>
-          <button class="calc-btn equals" data-act="equals">=</button>
-        </div>
-      </div>
-    </div>
-  </section>
+      
 <script>
 
     // Add this logic to your main navigation click handler

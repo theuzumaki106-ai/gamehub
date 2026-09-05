@@ -339,7 +339,7 @@
     font-size: 22px;
     line-height: 1.85;
     letter-spacing: 0.01em;
-    color: var(--fg-dimmer);
+    color: white;
     outline: none;
     user-select: none;
     filter: blur(0px);
@@ -353,7 +353,7 @@
 
   .text-display.blurred{ filter: blur(4px); }
   .text-display span.char{ position: relative; }
-  .text-display span.char.correct{ color: var(--fg); }
+  .text-display span.char.correct{ color: #4bff77; }
   .text-display span.char.incorrect{ color: var(--error); background: color-mix(in srgb, var(--error) 14%, transparent); }
   .text-display span.char.incorrect.space{ background: color-mix(in srgb, var(--error) 25%, transparent); }
 

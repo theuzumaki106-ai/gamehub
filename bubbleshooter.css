@@ -1,4 +1,4 @@
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap');
 
   :root{
     --ink: #f4f0ff;
@@ -20,7 +20,8 @@
       linear-gradient(180deg, #0d0824 0%, #150a30 45%, #0a0620 100%);
     font-family: 'Nunito', sans-serif;
     color: var(--ink);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     touch-action: none;
   }
 
@@ -34,7 +35,8 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    min-height:100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: 14px 10px 22px;
   }
 
@@ -61,7 +63,7 @@
 
   .hud{
     width: 100%;
-    max-width: 480px;
+    max-width: var(--stage-w, 480px);
     display:flex;
     justify-content: space-between;
     align-items:center;
@@ -88,7 +90,7 @@
   #stage-wrap{
     position: relative;
     width: 100%;
-    max-width: 480px;
+    max-width: var(--stage-w, 480px);
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 18px 40px var(--shadow-deep), inset 0 0 0 1px var(--panel-edge);
@@ -138,8 +140,33 @@
 
   #controls-row{
     display:flex; gap:10px; margin-top:12px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   #controls-row .btn{ font-size: 14px; padding: 9px 18px; }
+
+  #nextWrap{
+    position: relative;
+    width: 44px; height: 44px;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  #nextWrap:hover{ transform: scale(1.08); }
+  #nextWrap:active{ transform: scale(0.94); }
+  #nextPreview{ border-radius: 50%; display:block; }
+  #swapBadge{
+    position:absolute;
+    right:-6px; bottom:-6px;
+    width:18px; height:18px;
+    border-radius:50%;
+    background: linear-gradient(180deg, #ffe28a 0%, var(--gold) 60%, var(--gold-deep) 100%);
+    color:#2b1400;
+    font-size:11px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4), 0 0 0 2px rgba(21,10,48,0.9);
+    pointer-events:none;
+    transition: transform 0.2s ease;
+  }
 
   .footer-hint{
     margin-top: 10px;

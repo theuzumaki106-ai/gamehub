@@ -7,7 +7,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover; /* Ensures image fills card without distorting */
-  opacity: 0.15;     /* Darkens image so white text is easy to read */
+  opacity: 0.35;     /* Darkens image so white text is easy to read */
   z-index: 1;
 }
 /* Keeps text content above the background image */

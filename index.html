@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roll &amp; Row · Retro Arcade Hub | Viswajeet Studio</title>
+  <meta name="description" content="Ultimate 80s/90s Retro Cyberpunk Arcade Portal featuring playable games, 3D simulations, and everyday creative tools. Zero install.">
+  
+  <!-- OpenGraph / Social Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Roll &amp; Row · Retro Arcade Hub">
+  <meta property="og:description" content="Play retro games, 3D simulations, and creative tools with chiptune audio &amp; CRT simulation.">
+  <meta property="og:image" content="IMG/apexhorizon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <link rel="icon" type="image/x-icon" href="gamehublogo.ico">
+  
+  <!-- Fonts: Pixel, Cyber Arcade, Monospace & Crisp Body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=VT323&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <!-- Base Game Boards CSS & Master Retro Stylesheet -->
+  <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="retro.css">
+</head>
+<body class="crt-disabled">
+  <!-- 60FPS Perspective Wireframe Grid & Starfield -->
+  <canvas id="retro-canvas"></canvas>
+  
+  <!-- CRT Monitor Scanlines & Curved Screen Glow -->
+  <div class="crt-overlay"></div>
+
+  <div class="arcade-shell">
+    <!-- TOP HEADER -->
+    <header class="arcade-header">
+      <div class="brand-wrapper" onclick="gotoView('hub')">
+        <div class="dice-emblem">⚄</div>
+        <div class="brand-text">
+          <h1>ROLL &amp; ROW <span>ARCADE</span></h1>
+          <div class="brand-tagline">VISWAJEET STUDIO · GAMES &amp; CYBER TOOLS</div>
+        </div>
+      </div>
+
+      <div class="arcade-gadgets">
+        <button class="gadget-btn" id="sfxToggle"><span>🔊</span> SFX: ON</button>
+        <button class="gadget-btn" id="crtToggle"><span>📺</span> CRT: OFF</button>
+      </div>
+    </header>
+
+    <!-- RETRO LED MARQUEE TICKER -->
+    <div class="retro-marquee">
+      <span class="marquee-badge">ARCADE LIVE</span>
+      <div class="marquee-track">
+        <span class="marquee-content">
+          ★ WELCOME TO ROLL &amp; ROW RETRO ARCADE ★ 11 PLAYABLE GAMES &amp; CYBER TOOLS ★ ZERO INSTALL ★ REAL-TIME CHIPTUNE AUDIO ★ CRT MONITOR SIMULATION ★ CRAFTED BY VISWAJEET STUDIO ★
+        </span>
+      </div>
+    </div>
+
+    <!-- TOOLBAR: 2-OPTION NAVIGATION (GAMES & APPS) + LIVE SEARCH -->
+    <div class="toolbar-wrap">
+      <div class="category-tabs">
+        <button class="cat-tab active" data-filter="games">🎮 GAMES (7)</button>
+        <button class="cat-tab" data-filter="apps">🧰 APPS (4)</button>
+      </div>
+
+      <div class="search-box-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="arcadeSearch" placeholder="SEARCH TITLES...">
+      </div>
+    </div>
+
+    <!-- MAIN ARCADE HUB VIEW -->
+    <section class="arcade-view active" id="view-hub">
+      <div class="arcade-grid" id="mainArcadeGrid">
+
+        <!-- ==================== GAMES ==================== -->
+
+
+
+        <!--  APEX HORIZON 3D -->
+
+        <div class="game-card featured-card" data-category="games">
+          <div class="card-media">
+            <img src="IMG/apexhorizon.png" class="card-img" alt="Apex Horizon 3D Preview">
+            <span class="media-tag pill-pink">3D WORLD</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-cyan">THREE.JS</span>
+              <span class="card-pill pill-yellow">OPEN WORLD</span>
+            </div>
+            <h3>Apex Horizon</h3>
+            <p>Explore an expansive 3D metropolis with supercars, skyscrapers, sound engine, and third-person physics.</p>
+            <div class="card-actions">
+              <a href="apexhorizon.html" class="play-action-btn">LAUNCH 3D ►</a>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <!-- CHESS GAME -->
+
+<div class="game-card featured-card" data-category="games">
+  <div class="card-media">
+    <img src="IMG/chess.png" class="card-img" alt="Chess Game Preview">
+    <span class="media-tag pill-pink">STRATEGY</span>
+  </div>
+  <div class="card-content">
+    <div class="card-tags">
+      <span class="card-pill pill-cyan">2 PLAYER</span>
+      <span class="card-pill pill-yellow">BOARD GAME</span>
+    </div>
+    <h3>Chess Master</h3>
+    <p>Challenge your mind with classic chess. Play against friends or test your skills against the AI engine.</p>
+    <div class="card-actions">
+      <a href="chess.html" class="play-action-btn">PLAY NOW ►</a>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+        <!-- 2. CANDY BLAST SAGA -->
+        <div class="game-card" data-category="games">
+          <div class="card-media">
+            <img src="IMG/candycrush.png" class="card-img" alt="Candy Blast Saga Preview">
+            <span class="media-tag pill-yellow">MATCH-3</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-pink">CASCADE</span>
+              <span class="card-pill pill-green">PUZZLE</span>
+            </div>
+            <h3>Candy Blast Saga</h3>
+            <p>Swipe and match delicious sweet candies to trigger explosive cascading combos, complete objectives, and clear levels.</p>
+            <div class="card-actions">
+              <a href="candyblastsaga.html" class="play-action-btn">PLAY NOW ►</a>
+            </div>
+          </div>
+        </div>
+
+
+
+
+<!-- FRUIT SLICER -->
+
+<div class="game-card featured-card" data-category="games">
+  <div class="card-media">
+    <img src="IMG/fruitslicer.jpg" class="card-img" alt="Fruit Slicer Preview">
+    <span class="media-tag pill-pink">ARCADE</span>
+  </div>
+  <div class="card-content">
+    <div class="card-tags">
+      <span class="card-pill pill-cyan">ACTION</span>
+      <span class="card-pill pill-yellow">CANVAS</span>
+    </div>
+    <h3>Fruit Slicer</h3>
+    <p>Slice incoming flying fruits while dodging hazardous bombs to rack up high combo scores in intense fast-paced action.</p>
+    <div class="card-actions">
+      <a href="fruitslicer.html" class="play-action-btn">PLAY NOW ►</a>
+    </div>
+  </div>
+</div>
+
+
+
+        <!-- 3. INFINITE RUNNER (PIXEL DASH) -->
+        <div class="game-card" data-category="games">
+          <div class="card-media">
+            <img src="IMG/infiniterunner.png" class="card-img" alt="Infinite Runner Preview">
+            <span class="media-tag pill-cyan">RUNNER</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-yellow">HERO BUILDER</span>
+              <span class="card-pill pill-pink">ACTION</span>
+            </div>
+            <h3>Infinite Runner</h3>
+            <p>Dash, jump, and slide through an endless obstacle course. Customize your pixel character and beat high scores.</p>
+            <div class="card-actions">
+              <a href="infiniterunner.html" class="play-action-btn">PLAY NOW ►</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. BUBBLE SHOOTER -->
+        <div class="game-card" data-category="games">
+          <div class="card-media">
+            <img src="IMG/bubbleshooter.png" class="card-img" alt="Bubble Shooter Preview">
+            <span class="media-tag pill-green">PHYSICS</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-cyan">CANVAS</span>
+              <span class="card-pill pill-yellow">CASUAL</span>
+            </div>
+            <h3>Bubble Shooter</h3>
+            <p>Match 3 or more bubbles of the same color to pop them and clear the ceiling before they descend. Aim carefully!</p>
+            <div class="card-actions">
+              <a href="bubbleshooter.html" class="play-action-btn">PLAY NOW ►</a>
+            </div>
+          </div>
+        </div>
+
+
+
+<!-- UNO GAME -->
+
+<div class="game-card featured-card" data-category="games">
+  <div class="card-media">
+    <img src="IMG/uno.png" class="card-img" alt="Uno Game Preview">
+    <span class="media-tag pill-pink">CARD GAME</span>
+  </div>
+  <div class="card-content">
+    <div class="card-tags">
+      <span class="card-pill pill-cyan">MULTIPLAYER</span>
+      <span class="card-pill pill-yellow">CASUAL</span>
+    </div>
+    <h3>Uno Classic</h3>
+    <p>Match cards by color or number, play action-packed wild cards, and outsmart opponents to clear your hand first.</p>
+    <div class="card-actions">
+      <a href="ultimateuno.html" class="play-action-btn">PLAY NOW ►</a>
+    </div>
+  </div>
+</div>
+
+
+
+        <!-- 5. TIC-TAC-TOE NEON -->
+        <div class="game-card" data-goto="ttt" data-category="games">
+          <div class="card-media">
+            <img src="IMG/tictactoe.svg" class="card-img" alt="Tic-Tac-Toe Neon Preview">
+            <span class="media-tag pill-cyan">IN-HUB</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-pink">VS CPU</span>
+              <span class="card-pill pill-yellow">2 PLAYERS</span>
+            </div>
+            <h3>Tic-Tac-Toe Neon</h3>
+            <p>Three in a row wins. Play against a friend on one screen or test your nerve against the smart CPU AI.</p>
+            <div class="card-actions">
+              <button class="play-action-btn">PLAY IN-HUB ►</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. DOTS & BOXES CYBER -->
+        <div class="game-card" data-goto="dots" data-category="games">
+          <div class="card-media">
+            <img src="IMG/dotsboxes.svg" class="card-img" alt="Dots &amp; Boxes Cyber Preview">
+            <span class="media-tag pill-green">IN-HUB</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-cyan">TERRITORY</span>
+              <span class="card-pill pill-yellow">AI BOT</span>
+            </div>
+            <h3>Dots &amp; Boxes</h3>
+            <p>Connect grid dots to capture neon boxes. Outsmart the computer or battle a friend in classic and cyber themes.</p>
+            <div class="card-actions">
+              <button class="play-action-btn">PLAY IN-HUB ►</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. CARD MEMORY MATRIX -->
+        <div class="game-card" data-goto="memory" data-category="games">
+          <div class="card-media">
+            <img src="IMG/memory.svg" class="card-img" alt="Card Memory Match Preview">
+            <span class="media-tag pill-yellow">IN-HUB</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-pink">4X4 TO 10X10</span>
+              <span class="card-pill pill-cyan">BRAIN</span>
+            </div>
+            <h3>Card Memory Match</h3>
+            <p>Test your visual recall! Flip cards to locate matching icon pairs in scalable multiplayer grid battles.</p>
+            <div class="card-actions">
+              <button class="play-action-btn">PLAY IN-HUB ►</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== APPS ==================== -->
+
+        <!-- 8. CANVAS STUDIO PRO -->
+        <div class="game-card" data-category="apps">
+          <div class="card-media">
+            <img src="IMG/canvasstudio.svg" class="card-img" alt="Canvas Studio Pro Preview">
+            <span class="media-tag pill-cyan">PRO ART</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-pink">LAYERS</span>
+              <span class="card-pill pill-yellow">UNDO / REDO</span>
+            </div>
+            <h3>Canvas Studio</h3>
+            <p>Professional digital illustration app with layer stack, eyedropper, transforms, history snapshots, and PNG export.</p>
+            <div class="card-actions">
+              <a href="CanvasStudio.html" class="play-action-btn app-btn">OPEN STUDIO ►</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. RETRO MULTI-TOOL -->
+        <div class="game-card" data-goto="calc" data-category="apps">
+          <div class="card-media">
+            <img src="IMG/multitool.svg" class="card-img" alt="Retro Multi-Tool Preview">
+            <span class="media-tag pill-yellow">UTILITY</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-green">CALCULATOR</span>
+              <span class="card-pill pill-cyan">CLOCK</span>
+            </div>
+            <h3>Retro Multi-Tool</h3>
+            <p>Perform calculations in-hub, or launch the complete skeuomorphic suite with calendar and digital clock.</p>
+            <div class="card-actions">
+              <button class="play-action-btn app-btn">OPEN CALC ►</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. TERMINAL TYPING TEST -->
+        <div class="game-card" data-category="apps">
+          <div class="card-media">
+            <img src="IMG/terminaltyping.svg" class="card-img" alt="Terminal Typing Test Preview">
+            <span class="media-tag pill-green">CLI SPEED</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-cyan">WPM BENCHMARK</span>
+              <span class="card-pill pill-yellow">ACCURACY</span>
+            </div>
+            <h3>Terminal Typing Test</h3>
+            <p>Measure your typing speed and accuracy in an authentic hacker command-line environment with live WPM graphs.</p>
+            <div class="card-actions">
+              <a href="terminaltypingtest.html" class="play-action-btn app-btn">LAUNCH TERMINAL ►</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. MIC & SPEAKER TEST -->
+        <div class="game-card" data-category="apps">
+          <div class="card-media">
+            <img src="IMG/mictest.svg" class="card-img" alt="Mic &amp; Speaker Diagnostics Preview">
+            <span class="media-tag pill-pink">HARDWARE</span>
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="card-pill pill-cyan">AUDIO SPECTRUM</span>
+              <span class="card-pill pill-green">DIAGNOSTICS</span>
+            </div>
+            <h3>Mic &amp; Speaker Test</h3>
+            <p>Verify microphone inputs with live audio waveforms, test speaker channels, and generate custom sound frequencies.</p>
+            <div class="card-actions">
+              <a href="mic&amp;speakertest.html" class="play-action-btn app-btn">RUN TEST ►</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- EMPTY STATE SEARCH BANNER -->
+      <div id="noResultsMsg" style="display:none; text-align:center; padding: 60px 20px;">
+        <div style="font-family: var(--font-pixel); font-size: 16px; color: var(--neon-pink); margin-bottom: 12px;">
+          [ GAME OVER ]
+        </div>
+        <div style="font-family: var(--font-arcade); font-size: 20px; color: var(--text-white);">
+          NO TITLES MATCH YOUR SEARCH
+        </div>
+        <p style="color: var(--text-muted); margin-top: 8px;">Try clearing search terms or switching tabs.</p>
+      </div>
+    </section>
+
+    <!-- IN-HUB PLAYABLE SECTIONS -->
+    <section class="arcade-view" id="view-ttt">
+    <button class="return-hub-btn">◄ RETURN TO ARCADE HUB</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Tic-Tac-Toe</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="mode-select" id="tttMode">
+            <button data-mode="pvp" class="active">2 Player</button>
+            <button data-mode="cpu">Vs CPU</button>
+          </div>
+          <button class="reset-btn" id="tttReset">New round</button>
+        </div>
+      </div>
+      <div class="ttt-layout">
+        <div class="scoreboard">
+          <div class="score-chip x"><div class="lbl">X wins</div><div class="val" id="scoreX">0</div></div>
+          <div class="score-chip d"><div class="lbl">Draws</div><div class="val" id="scoreD">0</div></div>
+          <div class="score-chip o"><div class="lbl">O wins</div><div class="val" id="scoreO">0</div></div>
+        </div>
+        <div id="tttBoard"></div>
+        <div class="ttt-status" id="tttStatus">X's turn</div>
+      </div>
+    </div>
+  </section>
+    <section class="arcade-view" id="view-dots">
+    <button class="return-hub-btn">◄ RETURN TO ARCADE HUB</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Dots &amp; Boxes</h2>
+      </div>
+      <div class="dots-app-wrapper" id="dotsWrapper" data-theme="classic">
+        
+        <div class="dots-theme-selector">
+          <label for="dotsThemeSelect" style="font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase;">Theme:</label>
+          <select id="dotsThemeSelect" onchange="dotsChangeTheme(this.value)">
+            <option value="classic">Classic 3D</option>
+            <option value="neon">Cyber Neon</option>
+            <option value="wood">Rustic Wood</option>
+          </select>
+        </div>
+
+        <div class="dots-scoreboard">
+          <div id="dots-p1-panel" class="dots-player-score active-p1">
+            <span id="dots-p1-name">Player 1</span>: <span id="dots-score1">0</span>
+          </div>
+          <div id="dots-p2-panel" class="dots-player-score">
+            <span id="dots-p2-name">Player 2</span>: <span id="dots-score2">0</span>
+          </div>
+        </div>
+
+        <div class="dots-board-container">
+          <div id="dots-board"></div>
+        </div>
+
+        <div class="dots-controls">
+          <button class="dots-btn" onclick="dotsInitGame(false)">Play 2 Players</button>
+          <button class="dots-btn" onclick="dotsInitGame(true)">Play vs AI Bot</button>
+        </div>
+
+        <div class="dots-winner-modal" id="dotsWinnerModal">
+          <div class="dots-modal-content" id="dotsModalContent">
+            <h2 id="dotsWinnerText">Player 1 Wins!</h2>
+            <div class="dots-controls" style="margin-top:0;">
+              <button class="dots-btn" onclick="dotsInitGame(false)">Play 2 Players</button>
+              <button class="dots-btn" onclick="dotsInitGame(true)">Play vs AI Bot</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+    <section class="arcade-view" id="view-memory">
+    <button class="return-hub-btn">◄ RETURN TO ARCADE HUB</button>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Multiplayer Memory Match</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select id="memory-grid-size" style="padding: 6px 10px; border-radius: 6px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.15); font-weight: bold; cursor: pointer;">
+            <option value="4">4 x 4 (16 cards)</option>
+            <option value="6">6 x 6 (36 cards)</option>
+            <option value="8">8 x 8 (64 cards)</option>
+            <option value="10">10 x 10 (100 cards)</option>
+          </select>
+          <button class="reset-btn" id="memory-start-btn" onclick="memoryStartGame()">Start New Game</button>
+        </div>
+      </div>
+      <div class="memory-layout">
+        <!-- Scoreboard -->
+        <div class="memory-scoreboard">
+          <div id="memory-p1-panel" class="memory-player-card memory-active-p1">
+            <h3 style="color:var(--p1-color);">Player 1</h3>
+            <div class="memory-score" id="memory-p1-score">0</div>
+          </div>
+          <div id="memory-p2-panel" class="memory-player-card">
+            <h3 style="color:var(--p2-color);">Player 2</h3>
+            <div class="memory-score" id="memory-p2-score">0</div>
+          </div>
+        </div>
+
+        <div id="memory-status-message">Select a grid size and click Start!</div>
+
+        <!-- Board Container -->
+        <div class="memory-game-board" id="memory-game-board"></div>
+      </div>
+    </div>
+  </section>
+    
+  <!-- RETRO CALCULATOR -->
+  <section class="arcade-view" id="view-calc">
+    <button class="return-hub-btn">◄ RETURN TO ARCADE HUB</button>
+    <div class="retro-cabinet" style="max-width: 440px; margin: 20px auto;">
+      <div class="cabinet-header">
+        <h2 class="cabinet-title">🧮 CYBER CALCULATOR</h2>
+        <button class="return-hub-btn" id="calcResetBtn">CLEAR [C]</button>
+      </div>
+      <div style="background: #000; border: 2px solid var(--neon-cyan); border-radius: 12px; padding: 16px; box-shadow: var(--glow-cyan); margin-bottom: 20px;">
+        <div id="calcPrev" style="font-family: var(--font-retro); font-size: 20px; color: var(--neon-pink); min-height: 24px; text-align: right; letter-spacing: 2px;">&nbsp;</div>
+        <div id="calcCurr" style="font-family: var(--font-retro); font-size: 42px; color: var(--neon-cyan); text-align: right; letter-spacing: 3px; overflow: hidden; text-overflow: ellipsis; text-shadow: var(--glow-cyan);">0</div>
+      </div>
+      <div id="calcGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+        <button data-act="clear" class="retro-btn" style="background: rgba(255,0,127,0.2); border: 1px solid var(--neon-pink); color: var(--neon-pink);">AC</button>
+        <button data-act="back" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: var(--text-white);">DEL</button>
+        <button data-act="percent" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: var(--text-white);">%</button>
+        <button data-op="÷" class="retro-btn retro-btn-pink">÷</button>
+
+        <button data-digit="7" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">7</button>
+        <button data-digit="8" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">8</button>
+        <button data-digit="9" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">9</button>
+        <button data-op="×" class="retro-btn retro-btn-pink">×</button>
+
+        <button data-digit="4" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">4</button>
+        <button data-digit="5" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">5</button>
+        <button data-digit="6" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">6</button>
+        <button data-op="−" class="retro-btn retro-btn-pink">−</button>
+
+        <button data-digit="1" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">1</button>
+        <button data-digit="2" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">2</button>
+        <button data-digit="3" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">3</button>
+        <button data-op="+" class="retro-btn retro-btn-pink">+</button>
+
+        <button data-act="sign" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: var(--text-white);">±</button>
+        <button data-digit="0" class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">0</button>
+        <button data-digit="." class="retro-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(0,240,255,0.3); color: var(--text-white);">.</button>
+        <button data-act="equals" class="retro-btn retro-btn-cyan">=</button>
+      </div>
+    </div>
+  </section>
+
+
+    <!-- FOOTER -->
+    <footer class="arcade-footer">
+      <p>ROLL &amp; ROW RETRO ARCADE · VISWAJEET STUDIO © 2026</p>
+      <p style="margin-top: 6px; color: #555880;">ALL RIGHTS RESERVED · POWERED BY PURE CLIENT-SIDE JAVASCRIPT &amp; WEB AUDIO</p>
+    </footer>
+  </div>
+
+  <!-- CORE SCRIPTS -->
+  <script src="retro-audio.js"></script>
+  <script src="retro-bg.js"></script>
+  <script src="retro-engine.js"></script>
+  <script src="games-engine.js"></script>
+</body>
+</html>

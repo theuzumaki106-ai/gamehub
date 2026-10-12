@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-mem" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a051d"/>
+      <stop offset="100%" stop-color="#210f44"/>
+    </linearGradient>
+    <linearGradient id="card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff007f"/>
+      <stop offset="100%" stop-color="#7928ca"/>
+    </linearGradient>
+    <filter id="glow-m" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="220" fill="url(#bg-mem)"/>
+  <!-- Card 1 Back -->
+  <rect x="50" y="45" width="65" height="95" rx="8" fill="#131030" stroke="#00f0ff" stroke-width="2"/>
+  <text x="82" y="100" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="28" fill="#00f0ff">?</text>
+  <!-- Card 2 Matched (Diamond) -->
+  <rect x="135" y="35" width="70" height="105" rx="8" fill="url(#card-grad)" stroke="#ffe600" stroke-width="3" filter="url(#glow-m)"/>
+  <text x="170" y="98" text-anchor="middle" font-size="34">💎</text>
+  <!-- Card 3 Matched Pair (Diamond) -->
+  <rect x="225" y="35" width="70" height="105" rx="8" fill="url(#card-grad)" stroke="#ffe600" stroke-width="3" filter="url(#glow-m)"/>
+  <text x="260" y="98" text-anchor="middle" font-size="34">💎</text>
+  <!-- Card 4 Back -->
+  <rect x="315" y="45" width="65" height="95" rx="8" fill="#131030" stroke="#00f0ff" stroke-width="2"/>
+  <text x="347" y="100" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="28" fill="#00f0ff">?</text>
+  <!-- Match Banner -->
+  <text x="200" y="170" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="14" fill="#ffe600" letter-spacing="3">MATCH FOUND! +100 PTS</text>
+  <text x="200" y="205" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="12" fill="#ff007f" letter-spacing="4">CARD MEMORY MATCH</text>
+</svg>

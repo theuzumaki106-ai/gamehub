@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-tt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#051408"/>
+      <stop offset="100%" stop-color="#0a2411"/>
+    </linearGradient>
+    <filter id="glow-tt" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="220" fill="url(#bg-tt)"/>
+  <!-- Terminal Window Frame -->
+  <rect x="35" y="25" width="330" height="145" rx="8" fill="#000000" stroke="#39ff14" stroke-width="2" filter="url(#glow-tt)"/>
+  <!-- Top bar -->
+  <line x1="35" y1="48" x2="365" y2="48" stroke="#39ff14" stroke-width="1"/>
+  <circle cx="50" cy="37" r="4" fill="#ff007f"/>
+  <circle cx="64" cy="37" r="4" fill="#ffe600"/>
+  <circle cx="78" cy="37" r="4" fill="#39ff14"/>
+  <text x="200" y="41" text-anchor="middle" font-family="'VT323', monospace" font-size="14" fill="#39ff14">root@viswajeet:~/typing-test</text>
+  <!-- Command lines -->
+  <text x="50" y="75" font-family="'VT323', monospace" font-size="20" fill="#39ff14">$ speed_benchmark --mode=hacker</text>
+  <text x="50" y="105" font-family="'VT323', monospace" font-size="22" fill="#ffffff">> WPM: <tspan fill="#39ff14" font-weight="bold">128</tspan> | ACCURACY: <tspan fill="#00f0ff">99.4%</tspan></text>
+  <text x="50" y="135" font-family="'VT323', monospace" font-size="20" fill="#39ff14">> type faster to break record_<tspan fill="#ffe600">█</tspan></text>
+  <text x="200" y="205" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="12" fill="#39ff14" letter-spacing="4">TERMINAL TYPING TEST</text>
+</svg>

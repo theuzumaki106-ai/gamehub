@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-mic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080718"/>
+      <stop offset="100%" stop-color="#191338"/>
+    </linearGradient>
+    <filter id="glow-mic" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="220" fill="url(#bg-mic)"/>
+  <!-- Microphone Graphic -->
+  <g transform="translate(100, 35)">
+    <rect x="-16" y="0" width="32" height="50" rx="16" fill="#1b1b3a" stroke="#ff007f" stroke-width="3" filter="url(#glow-mic)"/>
+    <path d="M -24 30 A 24 24 0 0 0 24 30" fill="none" stroke="#00f0ff" stroke-width="3"/>
+    <line x1="0" y1="54" x2="0" y2="75" stroke="#00f0ff" stroke-width="3"/>
+    <line x1="-15" y1="75" x2="15" y2="75" stroke="#00f0ff" stroke-width="3"/>
+  </g>
+  <!-- Oscilloscope Waveform Bars -->
+  <g transform="translate(160, 45)" fill="#00f0ff" filter="url(#glow-mic)">
+    <rect x="0" y="25" width="6" height="30" rx="3"/>
+    <rect x="12" y="15" width="6" height="50" rx="3" fill="#ff007f"/>
+    <rect x="24" y="5" width="6" height="70" rx="3" fill="#ffe600"/>
+    <rect x="36" y="20" width="6" height="40" rx="3"/>
+    <rect x="48" y="0" width="6" height="80" rx="3" fill="#39ff14"/>
+    <rect x="60" y="15" width="6" height="50" rx="3" fill="#ffe600"/>
+    <rect x="72" y="30" width="6" height="20" rx="3"/>
+    <rect x="84" y="10" width="6" height="60" rx="3" fill="#ff007f"/>
+    <rect x="96" y="25" width="6" height="30" rx="3"/>
+    <rect x="108" y="35" width="6" height="10" rx="3"/>
+  </g>
+  <!-- Frequency Tags -->
+  <text x="220" y="150" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="11" fill="#ffe600">SPECTRUM: 220Hz · 440Hz · 1kHz · STEREO</text>
+  <text x="200" y="205" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="12" fill="#ff007f" letter-spacing="4">MIC &amp; SPEAKER DIAGNOSTICS</text>
+</svg>

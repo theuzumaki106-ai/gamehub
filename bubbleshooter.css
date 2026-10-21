@@ -355,6 +355,62 @@
     box-shadow: 0 0 16px rgba(255, 122, 184, 0.7), inset 0 0 10px rgba(255, 211, 92, 0.35);
   }
 
+  /* Super Master Tier (56-70) - Fiery Amber & Flame */
+  .level-card.super-master{
+    border-color: rgba(255, 159, 67, 0.5);
+    background: linear-gradient(135deg, rgba(70, 25, 18, 0.85), rgba(32, 10, 24, 0.92));
+  }
+  .level-card.super-master .lvl-num{
+    color: #ffb169;
+  }
+  .level-card.super-master:hover{
+    border-color: #ff9f43;
+    background: linear-gradient(135deg, rgba(95, 38, 22, 0.95), rgba(48, 14, 34, 0.98));
+    box-shadow: 0 6px 18px rgba(255, 159, 67, 0.55);
+  }
+  .level-card.super-master.current{
+    border-color: #ffd35c;
+    box-shadow: 0 0 16px rgba(255, 159, 67, 0.8), inset 0 0 10px rgba(255, 211, 92, 0.4);
+  }
+
+  /* Super Master Pro Tier (71-85) - Electric Cyan & Indigo */
+  .level-card.pro{
+    border-color: rgba(0, 245, 212, 0.5);
+    background: linear-gradient(135deg, rgba(12, 45, 60, 0.85), rgba(16, 18, 48, 0.92));
+  }
+  .level-card.pro .lvl-num{
+    color: #00f5d4;
+  }
+  .level-card.pro:hover{
+    border-color: #00f5d4;
+    background: linear-gradient(135deg, rgba(18, 68, 88, 0.95), rgba(24, 25, 70, 0.98));
+    box-shadow: 0 6px 18px rgba(0, 245, 212, 0.55);
+  }
+  .level-card.pro.current{
+    border-color: #ffd35c;
+    box-shadow: 0 0 16px rgba(0, 245, 212, 0.8), inset 0 0 10px rgba(255, 211, 92, 0.4);
+  }
+
+  /* Super Master Pro Ultra Tier (86-100) - Prismatic Mythic Gold & Aurora */
+  .level-card.ultra{
+    border-color: rgba(255, 211, 92, 0.65);
+    background: linear-gradient(135deg, rgba(65, 20, 75, 0.9), rgba(20, 40, 70, 0.95));
+    box-shadow: 0 2px 8px rgba(255, 211, 92, 0.25);
+  }
+  .level-card.ultra .lvl-num{
+    color: #ffd35c;
+    text-shadow: 0 0 8px rgba(255, 211, 92, 0.6);
+  }
+  .level-card.ultra:hover{
+    border-color: #fff2a8;
+    background: linear-gradient(135deg, rgba(88, 28, 102, 0.95), rgba(28, 55, 96, 0.98));
+    box-shadow: 0 6px 22px rgba(255, 211, 92, 0.6), 0 0 12px rgba(0, 245, 212, 0.4);
+  }
+  .level-card.ultra.current{
+    border-color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 211, 92, 0.9), 0 0 10px rgba(0, 245, 212, 0.6), inset 0 0 12px rgba(255, 211, 92, 0.5);
+  }
+
   .footer-hint{
     margin-top: 10px;
     color: var(--sub);
@@ -431,6 +487,63 @@
     font-weight: 700;
     font-size: 11px;
     margin-right: 4px;
+  }
+
+  /* Secret Code / Password Unlock Card in Help Modal */
+  .secret-unlock-card{
+    background: linear-gradient(135deg, rgba(48, 22, 92, 0.85), rgba(24, 12, 54, 0.95));
+    border: 1px solid rgba(255, 211, 92, 0.35);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+  .secret-input-row{
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  #secretCodeInput{
+    flex: 1;
+    min-width: 0;
+    background: rgba(12, 6, 28, 0.75);
+    border: 1px solid rgba(255, 211, 92, 0.4);
+    border-radius: 8px;
+    padding: 7px 12px;
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  #secretCodeInput:focus{
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(255, 211, 92, 0.35);
+  }
+  #secretCodeInput::placeholder{
+    color: rgba(185, 174, 224, 0.5);
+  }
+  .secret-unlock-btn{
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 3px 0 #9c6a08, 0 4px 10px rgba(0,0,0,0.3);
+    white-space: nowrap;
+    border-radius: 8px;
+  }
+  .secret-msg{
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 6px;
+    min-height: 18px;
+    transition: all 0.2s ease;
+  }
+  .secret-msg.success{
+    color: #5be07a;
+    text-shadow: 0 0 8px rgba(91, 224, 122, 0.5);
+  }
+  .secret-msg.error{
+    color: #ff5f6d;
+    text-shadow: 0 0 8px rgba(255, 95, 109, 0.5);
   }
   .help-footer{
     display: flex;

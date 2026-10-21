@@ -23,7 +23,7 @@
     </div>
     <div class="hud-block clickable" id="levelHudBlock" title="Click to view all levels">
       <div class="hud-label">Level ▾</div>
-      <div class="hud-value" id="levelVal">1 / 55</div>
+      <div class="hud-value" id="levelVal">1 / 100</div>
     </div>
     <div class="hud-block">
       <div class="hud-label">Best</div>
@@ -43,7 +43,7 @@
     
     <div id="overlay">
       <h2 id="overlayTitle">Orb Burst</h2>
-      <p id="overlayText">Aim, shoot, and match 3 or more orbs of the same color to burst them. Clear all 55 levels!</p>
+      <p id="overlayText">Aim, shoot, and match 3 or more orbs of the same color to burst them. Clear all 100 levels!</p>
       <div class="stat-line" id="overlayStat" style="display:none;"></div>
       <div class="overlay-actions" id="overlayActions">
         <button class="btn" id="overlayBtn">Play</button>
@@ -57,7 +57,7 @@
       <div class="level-modal-header">
         <div>
           <h3 class="level-modal-title">Select Level</h3>
-          <div class="level-modal-sub" id="levelProgressText">Unlocked: 1 / 55</div>
+          <div class="level-modal-sub" id="levelProgressText">Unlocked: 1 / 100</div>
         </div>
         <button class="level-close-btn" id="levelCloseBtn" title="Close">✕</button>
       </div>
@@ -119,8 +119,21 @@
         <div class="help-card">
           <div class="help-card-icon">🌟</div>
           <div class="help-card-body">
-            <h4>55 Levels & Star Ratings</h4>
-            <p>Clear each level to unlock the next! Earn up to 3 Stars (★★★) on every level by clearing with fewer shots. Includes 20 extra Master Difficulty levels!</p>
+            <h4>100 Levels & Star Ratings</h4>
+            <p>Clear each level to unlock the next! Earn up to 3 Stars (★★★) on every level. Includes Master, Super Master, Super Master Pro, and Super Master Pro Ultra tiers!</p>
+          </div>
+        </div>
+        <!-- Secret Password Card to Unlock All Levels -->
+        <div class="help-card secret-unlock-card">
+          <div class="help-card-icon">🔑</div>
+          <div class="help-card-body" style="width: 100%;">
+            <h4>Secret Level Unlock</h4>
+            <p>Enter secret password to instantly unlock all 100 levels:</p>
+            <div class="secret-input-row">
+              <input type="text" id="secretCodeInput" placeholder="Enter password..." autocomplete="off" spellcheck="false">
+              <button class="btn secret-unlock-btn" id="secretUnlockBtn">Unlock</button>
+            </div>
+            <div id="secretCodeMsg" class="secret-msg"></div>
           </div>
         </div>
       </div>
@@ -137,7 +150,7 @@
 
   <div id="controls-row">
     <button class="btn secondary" id="pauseBtn">Pause</button>
-    <button class="btn secondary" id="levelsBtn">Levels (55)</button>
+    <button class="btn secondary" id="levelsBtn">Levels (100)</button>
     <button class="btn secondary" id="soundBtn">Sound: On</button>
   </div>
 
@@ -266,6 +279,7 @@
     { id:'y', a:'#ffe066', b:'#e0a41c' },
     { id:'p', a:'#c58bff', b:'#7b2fd6' },
     { id:'o', a:'#ffab5e', b:'#e0651c' },
+    { id:'c', a:'#00f5d4', b:'#008b99' },
   ];
   function colorById(id){ return COLORS.find(c=>c.id===id); }
 
@@ -286,9 +300,9 @@
   function colsInRow(r){ return r%2===1 ? COLS-1 : COLS; }
 
   /* ---------------------------------------------------------
-     Game state & Level System (55 Levels)
+     Game state & Level System (100 Levels)
   --------------------------------------------------------- */
-  const TOTAL_LEVELS = 55;
+  const TOTAL_LEVELS = 100;
   const MAX_FOULS = 5;
   let fouls = MAX_FOULS;
 
@@ -316,6 +330,8 @@
   let floatTexts = [];        // "+30" style popups
 
   let state = 'menu';         // menu | aiming | flying | resolving | paused | over | win
+  let prevState = null;       // paused return state
+
   let animT = 0;
 
   document.getElementById('bestVal').textContent = best;
@@ -335,7 +351,7 @@
   }
 
   /* ---------------------------------------------------------
-     55 Distinct Level Architectures (Fast & Fun: 3 to 5 rows)
+     100 Distinct Level Architectures (Fast & Fun: 3 to 5 rows)
   --------------------------------------------------------- */
   const LEVEL_DEFS = [
     { name: "First Steps", rows: 3, colors: ['r', 'b'], type: 'stripes' },
@@ -393,7 +409,55 @@
     { name: "Abyss Maw", rows: 5, colors: ['p', 'b', 'r', 'g', 'y'], type: 'abyss' },
     { name: "Apex Trident", rows: 5, colors: ['b', 'p', 'r', 'y', 'o', 'g'], type: 'apex' },
     { name: "Supercluster", rows: 5, colors: ['p', 'b', 'y', 'g', 'o', 'r'], type: 'supercluster' },
-    { name: "Supreme Grandmaster", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'grand_master' }
+    { name: "Supreme Grandmaster", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'grand_master' },
+    // --- DIFFICULTY: SUPER MASTER (Levels 56 - 70, 6 Colors) ---
+    { name: "Solar Prominence", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'solar_prominence' },
+    { name: "Hydra Serpent", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'hydra' },
+    { name: "Valkyrie Shield", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'valkyrie' },
+    { name: "Plasma Vortex", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'plasma_vortex' },
+    { name: "Titan Colosseum", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'titan_colosseum' },
+    { name: "Chrono Spiral", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'chrono_spiral' },
+    { name: "Nebula Cross", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'nebula_cross' },
+    { name: "Prism Hexagon", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'prism_hex' },
+    { name: "Eclipse Corona", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'corona' },
+    { name: "Cosmic Trident", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'cosmic_trident' },
+    { name: "Vortex Matrix", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'vortex_matrix' },
+    { name: "Gorgon Gaze", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'gorgon' },
+    { name: "Supernova Core", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'supernova_core' },
+    { name: "Ouroboros", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'ouroboros' },
+    { name: "Grand Sovereign", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'grand_sovereign' },
+    // --- DIFFICULTY: SUPER MASTER PRO (Levels 71 - 85, 6 to 7 Colors) ---
+    { name: "Aurora Borealis", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'aurora' },
+    { name: "Quantum Entanglement", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'quantum_entanglement' },
+    { name: "Diamond Bastion", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'diamond_bastion' },
+    { name: "Pulsar Cascade", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'pulsar_cascade' },
+    { name: "Starlight Chevron", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'starlight_chevron' },
+    { name: "Cosmic Mirage", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'cosmic_mirage' },
+    { name: "Apex Sentinel", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o'], type: 'apex_sentinel' },
+    { name: "Neon Cyan Dawn", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'cyan_dawn' },
+    { name: "Prism Nexus", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'prism_nexus' },
+    { name: "Electra Lattice", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'electra_lattice' },
+    { name: "Galactic Swirl", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'galactic_swirl' },
+    { name: "Spectral Barrier", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'spectral_barrier' },
+    { name: "Cybernetic Ring", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'cyber_ring' },
+    { name: "Hyperdrive Beam", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'hyperdrive' },
+    { name: "Pro Grandmaster", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'pro_grandmaster' },
+    // --- DIFFICULTY: SUPER MASTER PRO ULTRA (Levels 86 - 100, 7 Colors) ---
+    { name: "Mythic Genesis", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'mythic_genesis' },
+    { name: "Singularity Gate", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'singularity_gate' },
+    { name: "Celestial Wings", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'celestial_wings' },
+    { name: "Dark Matter Web", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'dark_matter' },
+    { name: "Omni Prism", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'omni_prism' },
+    { name: "Vortex Horizon", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'vortex_horizon' },
+    { name: "Titan Monolith", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'titan_monolith' },
+    { name: "Aether Labyrinth", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'aether_labyrinth' },
+    { name: "Quantum Overdrive", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'quantum_overdrive' },
+    { name: "Supercluster Helix", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'supercluster_helix' },
+    { name: "Solaris Dominion", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'solaris_dominion' },
+    { name: "Archangel Citadel", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'archangel_citadel' },
+    { name: "Prismatic Infinity", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'prismatic_infinity' },
+    { name: "Godspeed Apex", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'godspeed_apex' },
+    { name: "Ultra Supreme Grandmaster", rows: 5, colors: ['r', 'b', 'g', 'y', 'p', 'o', 'c'], type: 'ultra_supreme' }
   ];
 
   /* ---------------------------------------------------------
@@ -745,6 +809,245 @@
             const angGM = Math.atan2(r - 2, c - 4.5);
             const spoke = Math.floor(((angGM + Math.PI) / (Math.PI * 2)) * 6);
             colId = colors[(Math.floor(dGM) + spoke) % numColors];
+            break;
+
+          // --- SUPER MASTER (Levels 56 - 70) ---
+          case 'solar_prominence':
+            if(r === 4 && (c === 0 || c === totalCols - 1)) spawn = false;
+            colId = colors[(Math.floor(Math.abs(c - 4.5) * 1.5) + r) % numColors];
+            break;
+          case 'hydra':
+            colId = colors[Math.floor(Math.abs(Math.sin(c + r * 1.2)) * 5) % numColors];
+            break;
+          case 'valkyrie':
+            if(r === 2 && (c === 4 || c === 5)) {
+              colId = colors[0];
+            } else {
+              colId = colors[Math.floor(Math.abs(c - 4.5) + (4 - r)) % numColors];
+            }
+            break;
+          case 'plasma_vortex':
+            const dPV = Math.hypot(c - 4.5, r - 2);
+            const aPV = Math.atan2(r - 2, c - 4.5);
+            colId = colors[Math.floor(Math.abs(aPV * 2.5 + dPV * 1.2)) % numColors];
+            break;
+          case 'titan_colosseum':
+            if(r === 2 && (c >= 3 && c <= 6)) spawn = false;
+            colId = colors[(Math.floor(Math.abs(c - 4.5)) + r) % numColors];
+            break;
+          case 'chrono_spiral':
+            const aCS = Math.atan2(r - 2, c - 4.5) + Math.PI;
+            const dCS = Math.hypot(c - 4.5, r - 2);
+            colId = colors[Math.floor(aCS * 2 + dCS * 1.5) % numColors];
+            break;
+          case 'nebula_cross':
+            if(r === 2 || c === 4 || c === 5){
+              colId = colors[0];
+            } else {
+              colId = colors[(r + c) % numColors];
+            }
+            break;
+          case 'prism_hex':
+            const hxD = Math.max(Math.abs(c - 4.5), Math.abs(r - 2) * 1.5);
+            colId = colors[Math.floor(hxD * 1.4) % numColors];
+            break;
+          case 'corona':
+            const dCor = Math.hypot(c - 4.5, r - 2);
+            if(dCor < 1.1) spawn = false;
+            colId = colors[Math.floor(dCor * 2) % numColors];
+            break;
+          case 'cosmic_trident':
+            if(r >= 3 && !(c === 2 || c === 5 || c === 8 || c === 1 || c === 7)){
+              spawn = false;
+            } else {
+              colId = colors[(c % 3 + r) % numColors];
+            }
+            break;
+          case 'vortex_matrix':
+            colId = colors[(c * 3 + r * 2) % numColors];
+            break;
+          case 'gorgon':
+            const gD = Math.hypot(c - 4.5, r - 1.5);
+            if(r === 2 && (c === 3 || c === 6)) {
+              colId = colors[1];
+            } else {
+              colId = colors[Math.floor(gD * 1.8 + (c % 2)) % numColors];
+            }
+            break;
+          case 'supernova_core':
+            const snD = Math.hypot(c - 4.5, r - 2);
+            if(snD < 1.3){
+              colId = colors[0];
+            } else {
+              colId = colors[(Math.floor(snD * 2) + (r % 2)) % numColors];
+            }
+            break;
+          case 'ouroboros':
+            const dOuro = Math.hypot(c - 4.5, r - 2);
+            if(dOuro < 1.0 || dOuro > 3.6){
+              spawn = (r === 0);
+              colId = colors[r % numColors];
+            } else {
+              const aOuro = Math.atan2(r - 2, c - 4.5) + Math.PI;
+              colId = colors[Math.floor((aOuro / (Math.PI * 2)) * numColors) % numColors];
+            }
+            break;
+          case 'grand_sovereign':
+            const dGSov = Math.hypot(c - 4.5, r - 2);
+            colId = colors[(Math.floor(dGSov) + Math.floor(Math.abs(c - 4.5))) % numColors];
+            break;
+
+          // --- SUPER MASTER PRO (Levels 71 - 85) ---
+          case 'aurora':
+            colId = colors[Math.floor(Math.sin(c * 0.7) * 2 + r * 1.3 + 5) % numColors];
+            break;
+          case 'quantum_entanglement':
+            const dQE1 = Math.hypot(c - 2.5, r - 2);
+            const dQE2 = Math.hypot(c - 6.5, r - 2);
+            colId = colors[Math.floor(Math.min(dQE1, dQE2) * 2) % numColors];
+            break;
+          case 'diamond_bastion':
+            const dBast = Math.abs(c - 4.5) + Math.abs(r - 2);
+            if(dBast === 0 || dBast === 1){
+              colId = colors[0];
+            } else {
+              colId = colors[Math.floor(dBast) % numColors];
+            }
+            break;
+          case 'pulsar_cascade':
+            colId = colors[(Math.floor(Math.abs(c - 4.5) * 2) + r * 3) % numColors];
+            break;
+          case 'starlight_chevron':
+            const chev2 = (c + r) % 4;
+            colId = colors[(chev2 * 2 + (r % 2)) % numColors];
+            break;
+          case 'cosmic_mirage':
+            const mirX = c > 4 ? totalCols - 1 - c : c;
+            colId = colors[(mirX * 2 + r) % numColors];
+            break;
+          case 'apex_sentinel':
+            if(r === 4 && (c < 3 || c > 6)) spawn = false;
+            colId = colors[(Math.floor(Math.abs(c - 4.5)) + r * 2) % numColors];
+            break;
+          case 'cyan_dawn':
+            if(r === 2 && (c === 4 || c === 5)){
+              colId = 'c';
+            } else if((c + r) % 3 === 0){
+              colId = 'c';
+            } else {
+              colId = colors[(c + r) % numColors];
+            }
+            break;
+          case 'prism_nexus':
+            const dPN = Math.hypot(c - 4.5, r - 2);
+            const aPN = Math.atan2(r - 2, c - 4.5);
+            colId = colors[Math.floor(Math.abs(aPN * 3 + dPN * 1.5)) % numColors];
+            break;
+          case 'electra_lattice':
+            colId = colors[((c % 2 === 0 ? r * 2 : r * 2 + 1) + Math.floor(c / 2)) % numColors];
+            break;
+          case 'galactic_swirl':
+            const dGSw = Math.hypot(c - 4.5, r - 2);
+            const aGSw = Math.atan2(r - 2, c - 4.5) + Math.PI;
+            colId = colors[Math.floor((aGSw * 2.2 + dGSw * 1.8)) % numColors];
+            break;
+          case 'spectral_barrier':
+            if(r === 2) {
+              colId = colors[numColors - 1];
+            } else {
+              colId = colors[(Math.floor(Math.abs(c - 4.5)) + r) % numColors];
+            }
+            break;
+          case 'cyber_ring':
+            const dCR = Math.hypot(c - 4.5, r - 2);
+            if(dCR >= 1.5 && dCR <= 2.8){
+              colId = 'c';
+            } else {
+              colId = colors[Math.floor(dCR * 1.5 + r) % numColors];
+            }
+            break;
+          case 'hyperdrive':
+            colId = colors[Math.floor(Math.abs(c - 4.5) * 3 + r) % numColors];
+            break;
+          case 'pro_grandmaster':
+            const dPGM = Math.hypot(c - 4.5, r - 2);
+            const spkPGM = Math.floor(((Math.atan2(r - 2, c - 4.5) + Math.PI) / (Math.PI * 2)) * 7);
+            colId = colors[(Math.floor(dPGM) + spkPGM) % numColors];
+            break;
+
+          // --- SUPER MASTER PRO ULTRA (Levels 86 - 100) ---
+          case 'mythic_genesis':
+            colId = colors[(c * 2 + r * 3 + Math.floor(Math.abs(c - 4.5))) % numColors];
+            break;
+          case 'singularity_gate':
+            const dSG2 = Math.hypot(c - 4.5, r - 2);
+            if(dSG2 < 1.2){
+              colId = 'c';
+            } else {
+              colId = colors[Math.floor(dSG2 * 2 + (r % 2)) % numColors];
+            }
+            break;
+          case 'celestial_wings':
+            if(r === 4 && (c === 4 || c === 5)) spawn = false;
+            colId = colors[(Math.floor(Math.abs(c - 4.5) * 2) + r) % numColors];
+            break;
+          case 'dark_matter':
+            if((r === 1 || r === 3) && (c % 3 === 0)) spawn = false;
+            colId = colors[(c * 3 + r * 4) % numColors];
+            break;
+          case 'omni_prism':
+            colId = colors[(c + r * 2) % numColors];
+            break;
+          case 'vortex_horizon':
+            const dVH = Math.hypot(c - 4.5, r - 2);
+            const aVH = Math.atan2(r - 2, c - 4.5) + Math.PI;
+            colId = colors[Math.floor((aVH * 3 + dVH * 2)) % numColors];
+            break;
+          case 'titan_monolith':
+            if(c === 4 || c === 5){
+              colId = 'c';
+            } else {
+              colId = colors[(r + Math.floor(Math.abs(c - 4.5))) % numColors];
+            }
+            break;
+          case 'aether_labyrinth':
+            colId = colors[((c % 3) * 2 + (r % 2) * 3 + Math.floor(c / 3)) % numColors];
+            break;
+          case 'quantum_overdrive':
+            const dQO = Math.hypot(c - 4.5, r - 2);
+            colId = colors[(Math.floor(dQO * 2.5) + (c % 2) * 3 + r) % numColors];
+            break;
+          case 'supercluster_helix':
+            colId = colors[Math.floor(Math.abs(Math.sin(c * 0.8 + r) * 7)) % numColors];
+            break;
+          case 'solaris_dominion':
+            const dSol = Math.hypot(c - 4.5, r - 1.5);
+            if(dSol <= 1.4){
+              colId = 'y';
+            } else if(dSol <= 2.6){
+              colId = 'o';
+            } else {
+              colId = colors[(Math.floor(dSol * 1.8) + c) % numColors];
+            }
+            break;
+          case 'archangel_citadel':
+            if(r === 0 && (c < 2 || c > totalCols - 3)) spawn = false;
+            colId = colors[(Math.floor(Math.abs(c - 4.5)) * 2 + r * 2) % numColors];
+            break;
+          case 'prismatic_infinity':
+            const dPInf1 = Math.hypot(c - 2.8, r - 2);
+            const dPInf2 = Math.hypot(c - 6.2, r - 2);
+            colId = colors[Math.floor(Math.min(dPInf1, dPInf2) * 2.5 + (r % 2)) % numColors];
+            break;
+          case 'godspeed_apex':
+            if(r >= 3 && !(c >= 3 && c <= 6)) spawn = false;
+            colId = colors[Math.floor(Math.abs(c - 4.5) * 2 + r * 3) % numColors];
+            break;
+          case 'ultra_supreme':
+            const dUS = Math.hypot(c - 4.5, r - 2);
+            const aUS = Math.atan2(r - 2, c - 4.5) + Math.PI;
+            const spokeUS = Math.floor((aUS / (Math.PI * 2)) * 7);
+            colId = colors[(Math.floor(dUS * 1.5) + spokeUS) % numColors];
             break;
           case 'mandala':
           default:
@@ -1239,10 +1542,10 @@
 
       if(isLastLevel){
         showOverlay(
-          '👑 All 55 Levels Cleared! 👑',
-          `You conquered every level, mastered all 20 Master levels, and became the Ultimate Orb Grandmaster!\nFinal Score: ${score}`,
+          '👑 ULTRA SUPREME GRANDMASTER! 👑',
+          `You conquered ALL 100 LEVELS, mastered Super Master, Super Master Pro, and Super Master Pro Ultra tiers!\nFinal Score: ${score}`,
           true,
-          'Replay Level 55',
+          'Replay Level 100',
           true
         );
       } else {
@@ -1419,10 +1722,24 @@
       if(isCurrent) card.classList.add('current');
       if(isLocked) card.classList.add('locked');
       if(stars > 0) card.classList.add('completed');
-      if(i > 35) card.classList.add('master');
+      if(i > 85){
+        card.classList.add('ultra');
+        card.title = `Level ${i} [ULTRA]: ${def ? def.name : ''}`;
+      } else if(i > 70){
+        card.classList.add('pro');
+        card.title = `Level ${i} [PRO]: ${def ? def.name : ''}`;
+      } else if(i > 55){
+        card.classList.add('super-master');
+        card.title = `Level ${i} [SUPER MASTER]: ${def ? def.name : ''}`;
+      } else if(i > 35){
+        card.classList.add('master');
+        card.title = `Level ${i} [MASTER]: ${def ? def.name : ''}`;
+      } else {
+        card.title = `Level ${i}: ${def ? def.name : ''}`;
+      }
 
-      const isMaster = i > 35;
-      card.title = `Level ${i}${isMaster ? ' [MASTER]' : ''}: ${def ? def.name : ''}`;
+
+
 
       if(isLocked){
         card.innerHTML = `
@@ -1466,6 +1783,11 @@
   let helpPrevState = null;
 
   function openHelpModal(){
+    const msgEl = document.getElementById('secretCodeMsg');
+    if(msgEl && unlockedLevel >= TOTAL_LEVELS && !msgEl.textContent){
+      msgEl.className = 'secret-msg success';
+      msgEl.textContent = '🌟 All 100 levels are unlocked!';
+    }
     ensureAudio();
     if(state === 'aiming' || state === 'flying'){
       helpPrevState = state;
@@ -1486,6 +1808,50 @@
   if(helpCloseBtn) helpCloseBtn.addEventListener('click', closeHelpModal);
   if(helpDoneBtn) helpDoneBtn.addEventListener('click', closeHelpModal);
   if(overlayRulesBtn) overlayRulesBtn.addEventListener('click', openHelpModal);
+
+  /* Secret Password to Unlock All Levels (Cheat Code: Naruto@106) */
+  const secretCodeInput = document.getElementById('secretCodeInput');
+  const secretUnlockBtn = document.getElementById('secretUnlockBtn');
+  const secretCodeMsg = document.getElementById('secretCodeMsg');
+
+  function handleSecretUnlock(){
+    if(!secretCodeInput || !secretCodeMsg) return;
+    const val = secretCodeInput.value.trim();
+    if(val === 'Naruto@106'){
+      unlockedLevel = TOTAL_LEVELS;
+      localStorage.setItem('orbBurstUnlocked', String(TOTAL_LEVELS));
+      if(levelProgressText){
+        levelProgressText.textContent = `Unlocked: ${TOTAL_LEVELS} / ${TOTAL_LEVELS}`;
+      }
+      secretCodeMsg.className = 'secret-msg success';
+      secretCodeMsg.textContent = '🎉 All 100 levels unlocked successfully!';
+      secretCodeInput.value = '';
+      sfxLevel();
+      beep(1100, 0.25, 'triangle', 0.18, 0.3);
+      if(levelSelectModal && levelSelectModal.classList.contains('show')){
+        renderLevelGrid();
+      }
+    } else {
+      secretCodeMsg.className = 'secret-msg error';
+      secretCodeMsg.textContent = '❌ Incorrect password. Try again!';
+      beep(200, 0.25, 'sawtooth', 0.12);
+    }
+  }
+
+  if(secretUnlockBtn){
+    secretUnlockBtn.addEventListener('click', handleSecretUnlock);
+  }
+  if(secretCodeInput){
+    secretCodeInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        handleSecretUnlock();
+      }
+      if(e.code === 'Space'){
+        e.stopPropagation();
+      }
+    });
+  }
 
   // Next Orb Swap
   const nextWrap = document.getElementById('nextWrap');
@@ -1539,7 +1905,7 @@
       showOverlay('Paused', 'Take a breather. Tap resume when you\'re ready to keep popping orbs.', false, 'Resume', true, true);
     }
   });
-  let prevState = null;
+
 
   document.getElementById('soundBtn').addEventListener('click', (e)=>{
     ensureAudio();
@@ -1584,7 +1950,7 @@
   buildLevel(level);
   showOverlay(
     'Orb Burst',
-    '🎯 Aim & match 3+ same-colored orbs to pop them.\n🪂 Drop detached orbs for big bonus points!\n⇄ Click Next Orb or press [Space] to swap.\n⚠️ 5 misses drop the ceiling (●●●●●).\nClear all 55 levels before orbs cross the danger line!',
+    '🎯 Aim & match 3+ same-colored orbs to pop them.\n🪂 Drop detached orbs for big bonus points!\n⇄ Click Next Orb or press [Space] to swap.\n⚠️ 5 misses drop the ceiling (●●●●●).\nClear all 100 levels before orbs cross the danger line!',
     true,
     'Play Level ' + level,
     true,
